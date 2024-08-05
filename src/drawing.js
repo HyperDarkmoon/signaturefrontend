@@ -95,7 +95,7 @@ function DrawingCanvas() {
       <div className="row mt-2">
         <div className="col text-center">
           <button className="btn btn-danger mr-2" onClick={resetCanvas}>Reset</button>
-          <button className="btn btn-success" onClick={downloadImage}>Download</button>
+          <button className="btn btn-success" onClick={downloadImage}>Save</button>
         </div>
       </div>
     </div>
