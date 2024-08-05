@@ -67,7 +67,7 @@ function DrawingCanvas({ onClose }) {
       ctx.closePath();
     });
   };
-  
+
   const downloadImage = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -78,11 +78,10 @@ function DrawingCanvas({ onClose }) {
     link.click();
   };
 
-
   return (
     <div className="drawing-widget">
       <div className="widget-header">
-        <h4>Drawing Canvas</h4>
+        <h4>Please input your signature</h4>
         <button className="btn btn-close" onClick={onClose}>X</button>
       </div>
       <div>
