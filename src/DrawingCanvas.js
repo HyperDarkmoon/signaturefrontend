@@ -5,11 +5,13 @@ function DrawingCanvas({ onClose }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokes, setStrokes] = useState([]);
+  const [lastPoint, setLastPoint] = useState(null);
   const lineWidth = 5; // Uniform line thickness
 
   const startDrawing = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
     setIsDrawing(true);
+    setLastPoint({ offsetX, offsetY });
     setStrokes([...strokes, [{ offsetX, offsetY }]]);
   };
 
@@ -35,8 +37,21 @@ function DrawingCanvas({ onClose }) {
     ctx.closePath();
   };
 
-  const stopDrawing = () => {
-    setIsDrawing(false);
+  const stopDrawing = (event) => {
+    if (isDrawing) {
+      const { offsetX, offsetY } = event.nativeEvent;
+      if (lastPoint && (offsetX === lastPoint.offsetX && offsetY === lastPoint.offsetY)) {
+        // Draw a dot if there's no movement
+        const ctx = canvasRef.current.getContext('2d');
+        ctx.beginPath();
+        ctx.arc(lastPoint.offsetX, lastPoint.offsetY, lineWidth / 2, 0, 2 * Math.PI);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        ctx.closePath();
+      }
+      setIsDrawing(false);
+      setLastPoint(null);
+    }
   };
 
   const resetCanvas = () => {
@@ -46,7 +61,6 @@ function DrawingCanvas({ onClose }) {
     ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height); // Fill canvas with background color
     setStrokes([]);
   };
-
 
   const redraw = (strokes) => {
     const ctx = canvasRef.current.getContext('2d');
@@ -71,6 +85,10 @@ function DrawingCanvas({ onClose }) {
   const downloadImage = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
+    // Redraw the canvas with white background before generating the image
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    redraw(strokes); // Redraw the strokes on top of the white background
     const imageUrl = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = imageUrl;
