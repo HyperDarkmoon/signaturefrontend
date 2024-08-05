@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function DrawingCanvas() {
+function DrawingCanvas({ onClose }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokes, setStrokes] = useState([]);
@@ -47,6 +47,7 @@ function DrawingCanvas() {
     setStrokes([]);
   };
 
+
   const redraw = (strokes) => {
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -66,9 +67,10 @@ function DrawingCanvas() {
       ctx.closePath();
     });
   };
-
+  
   const downloadImage = () => {
     const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     const imageUrl = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = imageUrl;
@@ -76,27 +78,28 @@ function DrawingCanvas() {
     link.click();
   };
 
+
   return (
-    <div className="container mt-3">
-      <div className="row">
-        <div className="col">
-          <canvas
-            ref={canvasRef}
-            width={800}
-            height={600}
-            onMouseDown={startDrawing}
-            onMouseUp={stopDrawing}
-            onMouseMove={draw}
-            onMouseLeave={stopDrawing} // Ensure drawing stops when the mouse leaves the canvas
-            style={{ border: '1px solid black', display: 'block', margin: '0 auto' }}
-          />
-        </div>
+    <div className="drawing-widget">
+      <div className="widget-header">
+        <h4>Drawing Canvas</h4>
+        <button className="btn btn-close" onClick={onClose}>X</button>
       </div>
-      <div className="row mt-2">
-        <div className="col text-center">
-          <button className="btn btn-danger mr-2" onClick={resetCanvas}>Reset</button>
-          <button className="btn btn-success" onClick={downloadImage}>Save</button>
-        </div>
+      <div>
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          onMouseDown={startDrawing}
+          onMouseUp={stopDrawing}
+          onMouseMove={draw}
+          onMouseLeave={stopDrawing}
+          style={{ border: '1px solid black', display: 'block', margin: '0 auto' }}
+        />
+      </div>
+      <div className="mt-2 text-center">
+        <button className="btn btn-danger mr-2" onClick={resetCanvas}>Reset</button>
+        <button className="btn btn-success" onClick={downloadImage}>Download</button>
       </div>
     </div>
   );

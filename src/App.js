@@ -1,11 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import DrawingCanvas from './drawing.js';
+import DrawingCanvas from './DrawingCanvas.js';
+import RegistrationForm from './RegistrationForm.js';
 
 function App() {
   return (
     <div className="App">
-      <DrawingCanvas />
+      <RegistrationForm />
     </div>
   );
 }
