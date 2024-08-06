@@ -37,7 +37,7 @@ function RegistrationForm() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,8 +55,19 @@ function RegistrationForm() {
           }
         });
         if (response.status === 200) {
-          setSuccess('Registration successful!');
+          // Reset form data and state
+          setFormData({
+            username: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+            signature: '',
+          });
           setErrors({});
+          setSuccess('Registration successful!');
+          
+          // Scroll to top
+          window.scrollTo(0, 0);
         }
       } catch (error) {
         if (error.response) {
