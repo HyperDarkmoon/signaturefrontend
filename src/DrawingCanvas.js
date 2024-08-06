@@ -99,7 +99,7 @@ function DrawingCanvas({ onClose, onSave }) {
     <div className="drawing-widget">
       <div className="widget-header">
         <h4>Please input your signature</h4>
-        <button className="btn btn-close" onClick={onClose}>X</button>
+        <button className="btn btn-danger" onClick={onClose}>X</button>
       </div>
       <div>
         <canvas
