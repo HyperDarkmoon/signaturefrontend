@@ -69,16 +69,23 @@ function RegistrationForm() {
           window.scrollTo(0, 0);
         }
       } catch (error) {
-        if (error.response) {
-          console.error('Error response:', error.response.data);
-          console.error('Error status:', error.response.status);
-          console.error('Error headers:', error.response.headers);
+        if (error.response && error.response.data) {
+          const errorMessage = error.response.data;
+          if (errorMessage === "Username already exists") {
+            setErrors({ username: errorMessage });
+          } else if (errorMessage === "Email already exists") {
+            setErrors({ email: errorMessage });
+          } else {
+            setErrors({ general: 'An error occurred. Please try again.' });
+          }
         } else if (error.request) {
           console.error('Error request:', error.request);
+          setErrors({ general: 'No response from server. Please try again later.' });
         } else {
           console.error('Error message:', error.message);
+          setErrors({ general: 'An unexpected error occurred. Please try again.' });
         }
-        console.error('Error config:', error.config);
+        setSuccess('');
       }
     } else {
       setSuccess('');
@@ -102,6 +109,7 @@ function RegistrationForm() {
         <Col md={6}>
           <h2 className="text-center mb-4">User Registration</h2>
           {success && <Alert variant="success">{success}</Alert>}
+          {errors.general && <Alert variant="danger">{errors.general}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="formUsername">
               <Form.Label>Username</Form.Label>
