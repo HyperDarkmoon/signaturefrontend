@@ -6,7 +6,7 @@ function DrawingCanvas({ onClose, onSave }) {
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokes, setStrokes] = useState([]);
   const [lastPoint, setLastPoint] = useState(null);
-  const lineWidth = 5; // Uniform line thickness
+  const lineWidth = 5; 
 
   const startDrawing = (event) => {
     const { offsetX, offsetY } = event.nativeEvent;
@@ -23,7 +23,7 @@ function DrawingCanvas({ onClose, onSave }) {
     setStrokes(newStrokes);
 
     const ctx = canvasRef.current.getContext('2d');
-    ctx.lineWidth = lineWidth; // Ensure uniform thickness
+    ctx.lineWidth = lineWidth; 
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'black';
 
@@ -57,17 +57,17 @@ function DrawingCanvas({ onClose, onSave }) {
   const resetCanvas = () => {
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    ctx.fillStyle = 'white'; // Set background color
-    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height); // Fill canvas with background color
+    ctx.fillStyle = 'white'; 
+    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height);
     setStrokes([]);
   };
 
   const redraw = (strokes) => {
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    ctx.fillStyle = 'white'; // Set background color
-    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height); // Fill canvas with background color
-    ctx.lineWidth = lineWidth; // Ensure uniform thickness
+    ctx.fillStyle = 'white'; // Background color
+    ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height); 
+    ctx.lineWidth = lineWidth; 
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'black';
 
@@ -88,7 +88,8 @@ function DrawingCanvas({ onClose, onSave }) {
     // Redraw the canvas with white background before generating the image
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    redraw(strokes); // Redraw the strokes on top of the white background
+    // Redraw the strokes on top of the white background
+    redraw(strokes); 
     const imageUrl = canvas.toDataURL('image/png');
     onSave(imageUrl);
     onClose();

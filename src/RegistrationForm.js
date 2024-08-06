@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-import DrawingCanvas from './DrawingCanvas'; // Ensure you import the DrawingCanvas component
-import './App.css'; // Ensure to import the CSS file
+import DrawingCanvas from './DrawingCanvas'; 
+import './App.css'; 
 import axios from 'axios';
 
 function RegistrationForm() {
@@ -47,7 +47,7 @@ function RegistrationForm() {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          signature: formData.signature ? formData.signature.split(',')[1] : '' // Strip the metadata
+          signature: formData.signature ? formData.signature.split(',')[1] : '' 
         };
         const response = await axios.post('http://localhost:8085/api/users/register', user, {
           headers: {
@@ -55,7 +55,6 @@ function RegistrationForm() {
           }
         });
         if (response.status === 200) {
-          // Reset form data and state
           setFormData({
             username: '',
             email: '',
