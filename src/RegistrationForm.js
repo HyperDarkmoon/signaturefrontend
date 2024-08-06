@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import DrawingCanvas from './DrawingCanvas'; // Ensure you import the DrawingCanvas component
 import './App.css'; // Ensure to import the CSS file
+import axios from 'axios';
 
 function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function RegistrationForm() {
     email: '',
     password: '',
     confirmPassword: '',
+    signature: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -35,14 +37,39 @@ function RegistrationForm() {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
-  const handleSubmit = (e) => {
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      setSuccess('Registration successful!');
-      setErrors({});
-      // Handle form submission, e.g., send data to an API
+      try {
+        const user = {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          signature: formData.signature ? formData.signature.split(',')[1] : '' // Strip the metadata
+        };
+        const response = await axios.post('http://localhost:8085/api/users/register', user, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.status === 200) {
+          setSuccess('Registration successful!');
+          setErrors({});
+        }
+      } catch (error) {
+        if (error.response) {
+          console.error('Error response:', error.response.data);
+          console.error('Error status:', error.response.status);
+          console.error('Error headers:', error.response.headers);
+        } else if (error.request) {
+          console.error('Error request:', error.request);
+        } else {
+          console.error('Error message:', error.message);
+        }
+        console.error('Error config:', error.config);
+      }
     } else {
       setSuccess('');
     }
@@ -52,7 +79,10 @@ function RegistrationForm() {
     setShowDrawingCanvas(true);
   };
 
-  const handleCloseDrawingCanvas = () => {
+  const handleCloseDrawingCanvas = (image) => {
+    if (image) {
+      setFormData({ ...formData, signature: image });
+    }
     setShowDrawingCanvas(false);
   };
 
@@ -115,21 +145,30 @@ function RegistrationForm() {
               <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
             </Form.Group>
 
-            <Button variant="success" onClick={handleSignatureClick} className="mt-3 w-100">
-              Signature
-            </Button>
-            
+            <Form.Group controlId="formSignature" className="mt-3">
+              <Form.Label>Signature</Form.Label>
+              <div className="text-center">
+                <Button variant="success" onClick={handleSignatureClick}>
+                  Input Signature
+                </Button>
+                {formData.signature && (
+                  <div className="mt-3">
+                    <img src={formData.signature} alt="Signature" style={{ maxWidth: '100%' }} />
+                  </div>
+                )}
+              </div>
+            </Form.Group>
+
             <Button variant="primary" type="submit" className="mt-4 w-100">
               Register
             </Button>
-
           </Form>
         </Col>
       </Row>
 
       {showDrawingCanvas && (
         <div className="drawing-canvas-widget">
-          <DrawingCanvas onClose={handleCloseDrawingCanvas} />
+          <DrawingCanvas onClose={handleCloseDrawingCanvas} onSave={handleCloseDrawingCanvas} />
         </div>
       )}
     </Container>

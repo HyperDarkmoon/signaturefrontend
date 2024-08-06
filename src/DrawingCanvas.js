@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function DrawingCanvas({ onClose }) {
+function DrawingCanvas({ onClose, onSave }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [strokes, setStrokes] = useState([]);
@@ -82,7 +82,7 @@ function DrawingCanvas({ onClose }) {
     });
   };
 
-  const downloadImage = () => {
+  const saveImage = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     // Redraw the canvas with white background before generating the image
@@ -90,10 +90,8 @@ function DrawingCanvas({ onClose }) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     redraw(strokes); // Redraw the strokes on top of the white background
     const imageUrl = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imageUrl;
-    link.download = 'drawing.png';
-    link.click();
+    onSave(imageUrl);
+    onClose();
   };
 
   return (
@@ -116,7 +114,7 @@ function DrawingCanvas({ onClose }) {
       </div>
       <div className="mt-2 text-center">
         <button className="btn btn-danger mr-2" onClick={resetCanvas}>Reset</button>
-        <button className="btn btn-success" onClick={downloadImage}>Download</button>
+        <button className="btn btn-success" onClick={saveImage}>Save</button>
       </div>
     </div>
   );
