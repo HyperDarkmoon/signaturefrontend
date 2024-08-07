@@ -17,7 +17,45 @@ function RegistrationForm() {
   const [success, setSuccess] = useState('');
   const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
 
-  const validateForm = () => {
+  const validateSignature = (signature) => {
+    if (!signature) {
+      return false;
+    }
+    
+    // Create an image from the signature data
+    const img = new Image();
+    img.src = signature;
+    
+    // Create a canvas to draw the image
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    
+    return new Promise((resolve) => {
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img, 0, 0);
+        
+        // Get the image data
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const { data } = imageData;
+        
+        // Check if there are non-white pixels
+        let isBlank = true;
+        for (let i = 0; i < data.length; i += 4) {
+          const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+          if (a !== 0 && !(r === 255 && g === 255 && b === 255)) {
+            isBlank = false;
+            break;
+          }
+        }
+        
+        resolve(!isBlank);
+      };
+    });
+  };
+
+  const validateForm = async () => {
     const newErrors = {};
 
     if (!formData.username) newErrors.username = 'Username is required';
@@ -28,6 +66,9 @@ function RegistrationForm() {
     }
     if (!formData.password) newErrors.password = 'Password is required';
     if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
+
+    const isSignatureValid = await validateSignature(formData.signature);
+    if (!isSignatureValid) newErrors.signature = 'Signature is required and cannot be blank';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -41,7 +82,7 @@ function RegistrationForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
+    if (await validateForm()) {
       try {
         const user = {
           username: formData.username,
@@ -169,9 +210,10 @@ function RegistrationForm() {
                 <Button variant="success" onClick={handleSignatureClick}>
                   Input Signature
                 </Button>
+                {errors.signature && <div className="text-danger mt-2">{errors.signature}</div>}
                 {formData.signature && (
                   <div className="mt-3">
-                    <img src={formData.signature} alt="Signature" style={{ maxWidth: '100%' }} />
+                    <img src={formData.signature} alt="Signature" style={{ maxWidth: '50%' }} />
                   </div>
                 )}
               </div>
