@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
-import DrawingCanvas from './DrawingCanvas'; 
-import './App.css'; 
+import DrawingCanvas from './DrawingCanvas';
+import './App.css';
 import axios from 'axios';
+import UseNavBar from './UseNavbar.js';
+import Navbar from './Navbar.js';
 
 function RegistrationForm() {
+  // Use the custom hook for Navbar
+  const [showRegistrationForm, handleRegisterClick, handleHomeClick] = UseNavBar();
+
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -21,25 +27,25 @@ function RegistrationForm() {
     if (!signature) {
       return false;
     }
-    
+
     // Create an image from the signature data
     const img = new Image();
     img.src = signature;
-    
+
     // Create a canvas to draw the image
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    
+
     return new Promise((resolve) => {
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         context.drawImage(img, 0, 0);
-        
+
         // Get the image data
         const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         const { data } = imageData;
-        
+
         // Check if there are non-white pixels
         let isBlank = true;
         for (let i = 0; i < data.length; i += 4) {
@@ -49,7 +55,7 @@ function RegistrationForm() {
             break;
           }
         }
-        
+
         resolve(!isBlank);
       };
     });
@@ -88,7 +94,7 @@ function RegistrationForm() {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          signature: formData.signature ? formData.signature.split(',')[1] : '' 
+          signature: formData.signature ? formData.signature.split(',')[1] : ''
         };
         const response = await axios.post('http://localhost:8085/api/users/register', user, {
           headers: {
@@ -105,7 +111,7 @@ function RegistrationForm() {
           });
           setErrors({});
           setSuccess('Registration successful!');
-          
+
           // Scroll to top
           window.scrollTo(0, 0);
         }
@@ -144,95 +150,105 @@ function RegistrationForm() {
     setShowDrawingCanvas(false);
   };
 
+
+
   return (
     <Container className="mt-5 position-relative">
-      <Row className="justify-content-center">
-        <Col md={6}>
-          <h2 className="text-center mb-4">User Registration</h2>
-          {success && <Alert variant="success">{success}</Alert>}
-          {errors.general && <Alert variant="danger">{errors.general}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter username"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-                isInvalid={!!errors.username}
-              />
-              <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="formEmail" className="mt-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                isInvalid={!!errors.email}
-              />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="formPassword" className="mt-3">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                isInvalid={!!errors.password}
-              />
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="formConfirmPassword" className="mt-3">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                isInvalid={!!errors.confirmPassword}
-              />
-              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="formSignature" className="mt-3">
-              <Form.Label>Signature</Form.Label>
-              <div className="text-center">
-                <Button variant="success" onClick={handleSignatureClick}>
-                  Input Signature
-                </Button>
-                {errors.signature && <div className="text-danger mt-2">{errors.signature}</div>}
-                {formData.signature && (
-                  <div className="mt-3">
-                    <img src={formData.signature} alt="Signature" style={{ maxWidth: '50%' }} />
-                  </div>
-                )}
-              </div>
-            </Form.Group>
-
-            <Button variant="primary" type="submit" className="mt-4 w-100">
-              Register
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-
+      <Navbar handleHomeClick={handleHomeClick} handleRegisterClick={handleRegisterClick} />
+      
+      {showRegistrationForm ? (
+        <Row className="justify-content-center">
+          <Col md={6}>
+            <h2 className="text-center mb-4">User Registration</h2>
+            {success && <Alert variant="success">{success}</Alert>}
+            {errors.general && <Alert variant="danger">{errors.general}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="formUsername">
+                <Form.Label>Username</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter username"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  isInvalid={!!errors.username}
+                />
+                <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+              </Form.Group>
+  
+              <Form.Group controlId="formEmail" className="mt-3">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  isInvalid={!!errors.email}
+                />
+                <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+              </Form.Group>
+  
+              <Form.Group controlId="formPassword" className="mt-3">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  isInvalid={!!errors.password}
+                />
+                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+              </Form.Group>
+  
+              <Form.Group controlId="formConfirmPassword" className="mt-3">
+                <Form.Label>Confirm Password</Form.Label>
+                <Form.Control
+                  type="password"
+                  placeholder="Confirm password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  isInvalid={!!errors.confirmPassword}
+                />
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+              </Form.Group>
+  
+              <Form.Group controlId="formSignature" className="mt-3">
+                <Form.Label>Signature</Form.Label>
+                <div className="text-center">
+                  <Button variant="success" onClick={handleSignatureClick}>
+                    Input Signature
+                  </Button>
+                  {errors.signature && <div className="text-danger mt-2">{errors.signature}</div>}
+                  {formData.signature && (
+                    <div className="mt-3">
+                      <img src={formData.signature} alt="Signature" style={{ maxWidth: '50%' }} />
+                    </div>
+                  )}
+                </div>
+              </Form.Group>
+  
+              <Button variant="primary" type="submit" className="mt-4 w-100">
+                Register
+              </Button>
+            </Form>
+          </Col>
+        </Row>
+      ) : (
+        <div>
+          {/* Add content for the case when showRegistrationForm is false, or simply render nothing */}
+        </div>
+      )}
+  
       {showDrawingCanvas && (
         <div className="drawing-canvas-widget">
           <DrawingCanvas onClose={handleCloseDrawingCanvas} onSave={handleCloseDrawingCanvas} />
         </div>
       )}
     </Container>
-  );
+  );  
 }
 
 export default RegistrationForm;
