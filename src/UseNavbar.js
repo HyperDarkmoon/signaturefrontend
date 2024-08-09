@@ -1,6 +1,7 @@
+// useNavBar.js
 import { useState } from 'react';
 
-function UseNavBar() {
+function useNavbar() {
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
 
   const handleRegisterClick = () => {
@@ -11,7 +12,8 @@ function UseNavBar() {
     setShowRegistrationForm(false);
   };
 
+  // Return an array with the state and handlers
   return [showRegistrationForm, handleRegisterClick, handleHomeClick];
 }
 
-export default UseNavBar;
+export default useNavbar;

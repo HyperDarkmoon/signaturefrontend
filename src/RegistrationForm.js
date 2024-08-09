@@ -3,12 +3,12 @@ import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import DrawingCanvas from './DrawingCanvas';
 import './App.css';
 import axios from 'axios';
-import UseNavBar from './UseNavbar.js';
+import useNavbar from './useNavbar.js';
 import Navbar from './Navbar.js';
 
 function RegistrationForm() {
   // Use the custom hook for Navbar
-  const [showRegistrationForm, handleRegisterClick, handleHomeClick] = UseNavBar();
+  const [showRegistrationForm, handleRegisterClick, handleHomeClick] = useNavbar();
 
 
   const [formData, setFormData] = useState({
