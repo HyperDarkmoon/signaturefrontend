@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert, Modal } from 'react-bootstrap';
 import DrawingCanvas from './DrawingCanvas'; 
 import './App.css'; 
 import axios from 'axios';
@@ -16,6 +16,7 @@ function RegistrationForm() {
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
   const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
+  const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   const validateSignature = (signature) => {
     if (!signature) {
@@ -137,11 +138,19 @@ function RegistrationForm() {
     setShowDrawingCanvas(true);
   };
 
+  const handleSignatureImageClick = () => {
+    setShowSignatureModal(true);
+  };
+
   const handleCloseDrawingCanvas = (image) => {
     if (image) {
       setFormData({ ...formData, signature: image });
     }
     setShowDrawingCanvas(false);
+  };
+
+  const handleCloseSignatureModal = () => {
+    setShowSignatureModal(false);
   };
 
   return (
@@ -213,7 +222,12 @@ function RegistrationForm() {
                 {errors.signature && <div className="text-danger mt-2">{errors.signature}</div>}
                 {formData.signature && (
                   <div className="mt-3">
-                    <img src={formData.signature} alt="Signature" style={{ maxWidth: '50%' }} />
+                    <img 
+                      src={formData.signature} 
+                      alt="Signature" 
+                      style={{ maxWidth: '50%', cursor: 'pointer' }} 
+                      onClick={handleSignatureImageClick} 
+                    />
                   </div>
                 )}
               </div>
@@ -231,6 +245,24 @@ function RegistrationForm() {
           <DrawingCanvas onClose={handleCloseDrawingCanvas} onSave={handleCloseDrawingCanvas} />
         </div>
       )}
+
+      <Modal show={showSignatureModal} onHide={handleCloseSignatureModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Signature</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <img 
+            src={formData.signature} 
+            alt="Signature Zoomed" 
+            style={{ width: '100%' }} 
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseSignatureModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 }
