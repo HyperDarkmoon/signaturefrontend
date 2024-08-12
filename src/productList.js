@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Dropdown, DropdownButton, Button, Form } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
+import RegistrationForm from './RegistrationForm'; // Import the RegistrationForm component
 import './productList.css'; // Custom CSS file
 
 const ProductList = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedOffer, setSelectedOffer] = useState('Select Offer');
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [showRegistration, setShowRegistration] = useState(false); // New state for registration card
+    const [showRegistration, setShowRegistration] = useState(false); // State for registration card visibility
 
     const items = [
         {
@@ -106,32 +107,10 @@ const ProductList = () => {
                                 <div className="col-md-8">
                                     <div className="card registration-card">
                                         <div className="card-body">
-                                            <h4 className="text-center mb-4">Registration Form</h4>
-                                            <Form>
-                                                <Form.Group controlId="formName">
-                                                    <Form.Label>Name</Form.Label>
-                                                    <Form.Control type="text" placeholder="Enter your name" />
-                                                </Form.Group>
-
-                                                <Form.Group controlId="formEmail">
-                                                    <Form.Label>Email address</Form.Label>
-                                                    <Form.Control type="email" placeholder="Enter your email" />
-                                                </Form.Group>
-
-                                                <Form.Group controlId="formPassword">
-                                                    <Form.Label>Password</Form.Label>
-                                                    <Form.Control type="password" placeholder="Enter your password" />
-                                                </Form.Group>
-
-                                                <Form.Group controlId="formConfirmPassword">
-                                                    <Form.Label>Confirm Password</Form.Label>
-                                                    <Form.Control type="password" placeholder="Confirm your password" />
-                                                </Form.Group>
-
-                                                <Button variant="primary" type="submit">
-                                                    Submit
-                                                </Button>
-                                            </Form>
+                                            <RegistrationForm
+                                                show={showRegistration}
+                                                onClose={() => setShowRegistration(false)}
+                                            />
                                         </div>
                                     </div>
                                 </div>
