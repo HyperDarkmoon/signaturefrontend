@@ -138,7 +138,7 @@ const RegistrationForm = ({ show, onClose }) => {
 
     return (
         <>
-            <div className="card registration-card">
+            <div>
                 <div className="card-body">
                     <h4 className="text-center mb-4">Registration Form</h4>
                     {success && <Alert variant="success">{success}</Alert>}

@@ -1,10 +1,20 @@
+/* productList.css */
+
+/* Root variables */
 :root {
     --primary-red: red; /* Define the red color as a variable */
+    --card-background: #f8f9fa; /* Background color for cards */
 }
 
+/* General container styling */
+.container {
+    margin-top: 20px;
+}
+
+/* Product card styling */
 .product-card {
     background-color: var(--primary-red); /* Use the variable */
-    color: white;                         
+    color: white;
     cursor: pointer;
     border: none;
     transition: transform 0.2s;
@@ -12,39 +22,40 @@
 }
 
 .product-card:hover {
-    transform: scale(1.05);               
+    transform: scale(1.05);
 }
 
+/* Detail card styling */
 .detail-card {
-    background-color: white;              
-    color: var(--primary-red);            
-    border: 2px solid var(--primary-red); 
-    border-radius: 0.375rem; 
-    padding: 1rem; 
-    position: relative; 
-    padding-bottom: 0rem; /* Default padding for the bottom */
+    background-color: white;
+    color: var(--primary-red);
+    border: 2px solid var(--primary-red);
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-bottom: 1rem; /* Space below the detail card */
+    position: relative;
 }
-
 
 .detail-card h4 {
     margin-bottom: 1rem;
-    color: var(--primary-red);            
+    color: var(--primary-red);
 }
 
-.card-title {
-    font-size: 1.5rem;
+/* Dropdown button styling */
+.dropdown-button {
+    margin-bottom: 1rem; /* Space below the dropdown button */
 }
 
-.card-text ul {
-    list-style-type: disc;
-    padding-left: 20px;
+/* Registration card styling */
+.registration-card {
+    background-color: var(--card-background); /* Light background color for the registration card */
+    border: 2px solid var(--primary-red); /* Border to match the theme */
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-top: 1rem; /* Space above the registration card */
 }
 
-.card-text ul li {
-    margin-bottom: 5px;
-}
-
-/* Ensure dropdown menu is not clipped */
+/* Styling for dropdown menu */
 .dropdown-menu {
     position: absolute; /* Ensure correct positioning */
     top: 100%; /* Position below the button */
@@ -54,15 +65,24 @@
     background-color: white; /* Ensure background color contrasts */
 }
 
-/* Style for the dropdown button */
-.dropdown-button {
-    margin-bottom: 7rem; /* Space below the dropdown button */ 
+/* Card title styling */
+.card-title {
+    font-size: 1.5rem;
 }
 
-.registration-card {
-    background-color: #f8f9fa; /* Light background color for the registration card */
-    border: 2px solid var(--primary-red); /* Border to match the theme */
-    border-radius: 0.375rem;
-    padding: 1rem;
-    margin-top: 1rem; /* Space above the registration card */
+/* Card text styling */
+.card-text ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.card-text ul li {
+    margin-bottom: 5px;
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    .container {
+        margin-top: 10px;
+    }
 }

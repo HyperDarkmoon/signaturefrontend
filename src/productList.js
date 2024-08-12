@@ -13,23 +13,29 @@ const ProductList = () => {
     const items = [
         {
             id: 1,
-            name: 'Item 1',
-            details: 'Details of Item 1',
+            name: 'SIM Card',
+            details: 'Choose your offer',
             offers: ['Offer 1', 'Offer 2', 'Offer 3'],
         },
         {
             id: 2,
-            name: 'Item 2',
-            details: 'Details of Item 2',
+            name: 'MBB Device',
+            details: 'Choose your offer',
             offers: ['Offer 4', 'Offer 5', 'Offer 6'],
         },
     ];
 
     const handleItemClick = (itemId) => {
-        setSelectedItem(selectedItem === itemId ? null : itemId);
-        setSelectedOffer('Select Offer');
-        setDropdownOpen(false);
-        setShowRegistration(false); // Hide registration card when item is toggled
+        if (selectedItem === itemId) {
+            // Deselect item if clicked again
+            setSelectedItem(null);
+            setShowRegistration(false); // Hide registration card
+        } else {
+            setSelectedItem(itemId);
+            setSelectedOffer('Select Offer');
+            setDropdownOpen(false);
+            setShowRegistration(false); // Hide registration card when a new item is selected
+        }
     };
 
     const handleOfferSelect = (offer) => {
@@ -42,7 +48,7 @@ const ProductList = () => {
     };
 
     const handleRegisterClick = () => {
-        setShowRegistration(true); // Show registration card when button is clicked
+        setShowRegistration(true); // Show registration card
     };
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
@@ -50,7 +56,7 @@ const ProductList = () => {
     return (
         <div className="container">
             <div className="row">
-                {items.map((item) => (
+                {items.map(item => (
                     <div
                         key={item.id}
                         className="col-md-6 mb-4"
@@ -90,7 +96,6 @@ const ProductList = () => {
                                     ))}
                                 </DropdownButton>
 
-                                {/* Button to show registration card */}
                                 <Button
                                     className="mt-3"
                                     variant="primary"
@@ -101,7 +106,6 @@ const ProductList = () => {
                             </div>
                         </div>
 
-                        {/* Registration card */}
                         {showRegistration && (
                             <div className="row justify-content-center mt-4">
                                 <div className="col-md-8">

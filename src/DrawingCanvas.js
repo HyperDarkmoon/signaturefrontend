@@ -85,10 +85,8 @@ function DrawingCanvas({ onClose, onSave }) {
   const saveImage = () => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    // Redraw the canvas with white background before generating the image
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Redraw the strokes on top of the white background
     redraw(strokes); 
     const imageUrl = canvas.toDataURL('image/png');
     onSave(imageUrl);
@@ -104,8 +102,8 @@ function DrawingCanvas({ onClose, onSave }) {
       <div>
         <canvas
           ref={canvasRef}
-          width={800}
-          height={600}
+          width={window.innerWidth - 1100} // Adjust width to fit the screen with some margin
+          height={300} // Set a fixed height for the canvas
           onMouseDown={startDrawing}
           onMouseUp={stopDrawing}
           onMouseMove={draw}
