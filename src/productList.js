@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
 import RegistrationForm from './RegistrationForm'; // Import the RegistrationForm component
+import PersonalInformationForm from './PersonalInformationForm'; // Import the PersonalInformationForm component
 import './productList.css'; // Custom CSS file
 
 const ProductList = () => {
@@ -9,6 +10,8 @@ const ProductList = () => {
     const [selectedOffer, setSelectedOffer] = useState('Select Offer');
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showRegistration, setShowRegistration] = useState(false); // State for registration card visibility
+    const [showBlankCard, setShowBlankCard] = useState(false); // State for blank card visibility
+    const [personalInfoData, setPersonalInfoData] = useState(null); // State to hold personal information form data
 
     const items = [
         {
@@ -30,11 +33,13 @@ const ProductList = () => {
             // Deselect item if clicked again
             setSelectedItem(null);
             setShowRegistration(false); // Hide registration card
+            setShowBlankCard(false); // Hide blank card
         } else {
             setSelectedItem(itemId);
             setSelectedOffer('Select Offer');
             setDropdownOpen(false);
             setShowRegistration(false); // Hide registration card when a new item is selected
+            setShowBlankCard(false); // Hide blank card when a new item is selected
         }
     };
 
@@ -49,6 +54,15 @@ const ProductList = () => {
 
     const handleRegisterClick = () => {
         setShowRegistration(true); // Show registration card
+    };
+
+    const handleContinueClick = () => {
+        setShowBlankCard(true); // Show blank card when "Continue" button is clicked
+    };
+
+    const handlePersonalInfoSubmit = (data) => {
+        setPersonalInfoData(data);
+        console.log('Personal Information Submitted:', data);
     };
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
@@ -114,9 +128,30 @@ const ProductList = () => {
                                             <RegistrationForm
                                                 show={showRegistration}
                                                 onClose={() => setShowRegistration(false)}
+                                                onContinue={handleContinueClick} // Pass handleContinueClick as a prop
                                             />
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Personal Information Form Inside the Blank Card */}
+                        {showBlankCard && (
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-md-8">
+                                    <div className="card personal-information-card">
+                                        <div className="card-body">
+                                            <PersonalInformationForm onSubmit={handlePersonalInfoSubmit} /> {/* Render the form here */}
+                                        </div>
+                                    </div>
+                                    <Button
+                                        variant="primary"
+                                        onClick={() => document.querySelector('.personal-information-card form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
+                                        className="w-50 mt-3"
+                                    >
+                                        Submit
+                                    </Button>
                                 </div>
                             </div>
                         )}

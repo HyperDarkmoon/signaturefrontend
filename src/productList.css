@@ -86,3 +86,13 @@
         margin-top: 10px;
     }
 }
+
+/* Personal information card styling */
+.personal-information-card {
+    background-color: var(--card-background); /* Light background color */
+    border: 2px solid var(--primary-red); /* Border to match the theme */
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-top: 1rem; /* Space above the card */
+    text-align: center; /* Center the text inside the card */
+}
