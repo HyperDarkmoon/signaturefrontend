@@ -32,6 +32,7 @@ const ProductList = () => {
         if (selectedItem === itemId) {
             // Deselect item if clicked again
             setSelectedItem(null);
+            setSelectedOffer('Select Offer');
             setShowRegistration(false); // Hide registration card
             setShowBlankCard(false); // Hide blank card
         } else {
@@ -53,7 +54,9 @@ const ProductList = () => {
     };
 
     const handleRegisterClick = () => {
-        setShowRegistration(true); // Show registration card
+        if (selectedOffer !== 'Select Offer') {
+            setShowRegistration(true); // Show registration card if an offer is selected
+        }
     };
 
     const handleContinueClick = () => {
@@ -120,6 +123,7 @@ const ProductList = () => {
                             </div>
                         </div>
 
+                        {/* Show Registration Card only if an offer is selected */}
                         {showRegistration && (
                             <div className="row justify-content-center mt-4">
                                 <div className="col-md-8">
