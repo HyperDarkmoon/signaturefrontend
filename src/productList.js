@@ -31,18 +31,8 @@ const ProductList = () => {
     ];
 
     const handleItemClick = (itemId) => {
-        if (selectedItem === itemId) {
-            setSelectedItem(null);
-            setSelectedOffer('Select Offer');
-            setShowRegistration(false);
-            setShowBlankCard(false);
-        } else {
-            setSelectedItem(itemId);
-            setSelectedOffer('Select Offer');
-            setDropdownOpen(false);
-            setShowRegistration(false);
-            setShowBlankCard(false);
-        }
+        setSelectedItem(selectedItem === itemId ? null : itemId);
+        resetState();
     };
 
     const handleOfferSelect = (offer) => {
@@ -84,16 +74,13 @@ const ProductList = () => {
             console.log('Submitting combined data:', combinedData);
 
             try {
-                // This function directly interacts with your backend API.
-                const response = await UserRegistration({
+                await UserRegistration({
                     formData: combinedData,
                     onSuccess: () => {
                         console.log('Registration successful!');
-                        // Additional success handling can go here.
                     },
                     onError: (error) => {
                         console.error('Error during registration:', error);
-                        // Error handling can go here.
                     }
                 });
             } catch (error) {
@@ -102,6 +89,12 @@ const ProductList = () => {
         } else {
             console.log('Both forms must be filled out before submission.');
         }
+    };
+
+    const resetState = () => {
+        setSelectedOffer('Select Offer');
+        setShowRegistration(false);
+        setShowBlankCard(false);
     };
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
