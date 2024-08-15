@@ -65,7 +65,7 @@ function DrawingCanvas({ onClose, onSave }) {
   const redraw = (strokes) => {
     const ctx = canvasRef.current.getContext('2d');
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    ctx.fillStyle = 'white'; // Background color
+    ctx.fillStyle = 'white'; 
     ctx.fillRect(0, 0, canvasRef.current.width, canvasRef.current.height); 
     ctx.lineWidth = lineWidth; 
     ctx.lineCap = 'round';
@@ -89,8 +89,8 @@ function DrawingCanvas({ onClose, onSave }) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     redraw(strokes); 
     const imageUrl = canvas.toDataURL('image/png');
-    onSave(imageUrl);
-    onClose();
+    if (onSave) onSave(imageUrl); // Check if onSave is defined
+    if (onClose) onClose(); // Check if onClose is defined
   };
 
   return (
