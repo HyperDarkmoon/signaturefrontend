@@ -69,6 +69,7 @@ const ProductList = () => {
             const combinedData = {
                 ...registrationData,
                 ...personalInfoData,
+                selectedOffer,
             };
 
             console.log('Submitting combined data:', combinedData);

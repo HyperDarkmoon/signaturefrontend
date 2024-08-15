@@ -16,6 +16,7 @@ const UserRegistration = async (data) => {
             phone: formData.phoneNumber,
             address: formData.address,
             signature: formData.signature ? formData.signature.split(',')[1] : '',
+            offer: formData.selectedOffer,
         };
 
         // Log the user object to verify its contents

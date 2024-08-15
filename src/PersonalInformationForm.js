@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Modal, Collapse } from 'react-bootstrap';
+import axios from 'axios';
 import DrawingCanvas from './DrawingCanvas';
 import './FormStyles.css';
 
@@ -27,7 +28,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { firstName, lastName, idCard, phoneNumber, address, signature } = formData;
         if (!firstName || !lastName || !idCard || !phoneNumber || !address) {
@@ -39,8 +40,31 @@ const PersonalInformationForm = ({ onSubmit }) => {
             return;
         }
 
-        setError('');
-        if (onSubmit) onSubmit(formData);
+        try {
+            // Check phone number and ID card with the backend
+            const response = await axios.get('http://localhost:8085/api/users/infocheck', {
+                params: {
+                    phone: phoneNumber,
+                    idCard: idCard
+                }
+            });
+            const { phoneExists, idCardExists } = response.data;
+            
+            if (phoneExists) {
+                setError('Phone number already exists.');
+                return;
+            }
+            if (idCardExists) {
+                setError('ID card number already exists.');
+                return;
+            }
+
+            setError('');
+            if (onSubmit) onSubmit(formData);
+        } catch (error) {
+            setError('An error occurred while checking information.');
+            console.error('Error checking user info:', error);
+        }
     };
 
     const handleSignatureClick = () => {
@@ -127,6 +151,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
 
                         <Form.Group controlId="formSignature" className="mt-3">
                             <Form.Label>Signature</Form.Label>
+                            <br></br>
                             <Button onClick={handleSignatureClick} variant="primary">
                                 Draw Signature
                             </Button>
