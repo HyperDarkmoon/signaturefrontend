@@ -34,7 +34,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
         }
 
         setError('');
-        if (onSubmit) onSubmit(formData); // Trigger the submission function passed as a prop
+        if (onSubmit) onSubmit(formData); // Pass data to parent component
     };
 
     const handleSignatureClick = () => {
@@ -135,6 +135,13 @@ const PersonalInformationForm = ({ onSubmit }) => {
                         )}
                     </div>
                 </Form.Group>
+                <Button
+                    variant="primary"
+                    type="submit"
+                    className="mt-4 w-100"
+                >
+                    Submit
+                </Button>
             </Form>
 
             {/* Signature Canvas Modal */}

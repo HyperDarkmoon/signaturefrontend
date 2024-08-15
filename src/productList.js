@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
-import RegistrationForm from './RegistrationForm'; // Import the RegistrationForm component
-import PersonalInformationForm from './PersonalInformationForm'; // Import the PersonalInformationForm component
-import './productList.css'; // Custom CSS file
+import RegistrationForm from './RegistrationForm';
+import PersonalInformationForm from './PersonalInformationForm';
+import './productList.css';
+import UserRegistration from './UserRegistration';
 
 const ProductList = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [selectedOffer, setSelectedOffer] = useState('Select Offer');
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [showRegistration, setShowRegistration] = useState(false); // State for registration card visibility
-    const [showBlankCard, setShowBlankCard] = useState(false); // State for blank card visibility
-    const [personalInfoData, setPersonalInfoData] = useState(null); // State to hold personal information form data
+    const [showRegistration, setShowRegistration] = useState(false);
+    const [showBlankCard, setShowBlankCard] = useState(false);
+    const [personalInfoData, setPersonalInfoData] = useState(null);
+    const [registrationData, setRegistrationData] = useState(null);
 
     const items = [
         {
@@ -30,17 +32,16 @@ const ProductList = () => {
 
     const handleItemClick = (itemId) => {
         if (selectedItem === itemId) {
-            // Deselect item if clicked again
             setSelectedItem(null);
             setSelectedOffer('Select Offer');
-            setShowRegistration(false); // Hide registration card
-            setShowBlankCard(false); // Hide blank card
+            setShowRegistration(false);
+            setShowBlankCard(false);
         } else {
             setSelectedItem(itemId);
             setSelectedOffer('Select Offer');
             setDropdownOpen(false);
-            setShowRegistration(false); // Hide registration card when a new item is selected
-            setShowBlankCard(false); // Hide blank card when a new item is selected
+            setShowRegistration(false);
+            setShowBlankCard(false);
         }
     };
 
@@ -55,17 +56,52 @@ const ProductList = () => {
 
     const handleRegisterClick = () => {
         if (selectedOffer !== 'Select Offer') {
-            setShowRegistration(true); // Show registration card if an offer is selected
+            setShowRegistration(true);
         }
     };
 
     const handleContinueClick = () => {
-        setShowBlankCard(true); // Show blank card when "Continue" button is clicked
+        setShowBlankCard(true);
     };
 
     const handlePersonalInfoSubmit = (data) => {
         setPersonalInfoData(data);
         console.log('Personal Information Submitted:', data);
+    };
+
+    const handleRegistrationFormData = (data) => {
+        setRegistrationData(data);
+        console.log('Registration Form Data:', data);
+    };
+
+    const handleSubmit = async () => {
+        if (registrationData && personalInfoData) {
+            const combinedData = {
+                ...registrationData,
+                ...personalInfoData,
+            };
+
+            console.log('Submitting combined data:', combinedData);
+
+            try {
+                // This function directly interacts with your backend API.
+                const response = await UserRegistration({
+                    formData: combinedData,
+                    onSuccess: () => {
+                        console.log('Registration successful!');
+                        // Additional success handling can go here.
+                    },
+                    onError: (error) => {
+                        console.error('Error during registration:', error);
+                        // Error handling can go here.
+                    }
+                });
+            } catch (error) {
+                console.error('Error submitting data:', error);
+            }
+        } else {
+            console.log('Both forms must be filled out before submission.');
+        }
     };
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
@@ -123,7 +159,6 @@ const ProductList = () => {
                             </div>
                         </div>
 
-                        {/* Show Registration Card only if an offer is selected */}
                         {showRegistration && (
                             <div className="row justify-content-center mt-4">
                                 <div className="col-md-8">
@@ -132,7 +167,8 @@ const ProductList = () => {
                                             <RegistrationForm
                                                 show={showRegistration}
                                                 onClose={() => setShowRegistration(false)}
-                                                onContinue={handleContinueClick} // Pass handleContinueClick as a prop
+                                                onContinue={handleContinueClick}
+                                                onData={handleRegistrationFormData}
                                             />
                                         </div>
                                     </div>
@@ -140,28 +176,28 @@ const ProductList = () => {
                             </div>
                         )}
 
-                        {/* Personal Information Form Inside the Blank Card */}
                         {showBlankCard && (
                             <div className="row justify-content-center mt-4">
                                 <div className="col-md-8">
                                     <div className="card personal-information-card">
                                         <div className="card-body">
-                                            <PersonalInformationForm onSubmit={handlePersonalInfoSubmit} /> {/* Render the form here */}
+                                            <PersonalInformationForm onSubmit={handlePersonalInfoSubmit} />
                                         </div>
                                     </div>
-                                    <Button
-                                        variant="primary"
-                                        onClick={() => document.querySelector('.personal-information-card form').dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }))}
-                                        className="w-50 mt-3"
-                                    >
-                                        Submit
-                                    </Button>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
             )}
+
+            <Button
+                variant="primary"
+                onClick={handleSubmit}
+                className="w-50 mt-3"
+            >
+                Submit
+            </Button>
         </div>
     );
 };

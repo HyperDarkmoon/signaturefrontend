@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Form, Alert, Modal } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
+import axios from 'axios';
 
-const RegistrationForm = ({ show, onClose, onContinue }) => {
+const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -17,14 +18,62 @@ const RegistrationForm = ({ show, onClose, onContinue }) => {
         setFormData({ ...formData, [name]: value });
     };
 
+    const checkUserExistence = async (username, email) => {
+        try {
+            console.log(`Checking user existence for username: ${username} and email: ${email}`);
+            const response = await axios.get(`http://localhost:8085/api/users/check?username=${username}&email=${email}`);
+            console.log('Response from checkUserExistence:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Error checking user existence:', error);
+            return { usernameExists: false, emailExists: false };
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const errors = {};
+        if (!formData.username) errors.username = 'Username is required';
+        if (!formData.email) errors.email = 'Email is required';
+        if (!formData.password) errors.password = 'Password is required';
+        if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'Passwords must match';
+
+        if (Object.keys(errors).length > 0) {
+            setErrors(errors);
+            return;
+        }
+
+        setErrors({});
+
+        // Check for existing username and email
+        const { usernameExists, emailExists } = await checkUserExistence(formData.username, formData.email);
+
+        // Update the errors state with both errors if they exist
+        const newErrors = {};
+        if (usernameExists) newErrors.username = 'Username already exists';
+        if (emailExists) newErrors.email = 'Email already exists';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        if (onData) {
+            onData(formData); // Pass data to parent component
+            setSuccess('Registered successfully!');
+            onContinue(); // Proceed to the next step
+        }
+    };
+
     return (
         <>
             <div>
                 <div className="card-body">
                     <h4 className="text-center mb-4">Registration Form</h4>
                     {success && <Alert variant="success">{success}</Alert>}
-                    {errors.general && <Alert variant="danger">{errors.general}</Alert>}
-                    <Form>
+                    {Object.keys(errors).length > 0 && <Alert variant="danger">{Object.values(errors).join(', ')}</Alert>}
+                    <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="formUsername">
                             <Form.Label>Username</Form.Label>
                             <Form.Control
@@ -79,7 +128,7 @@ const RegistrationForm = ({ show, onClose, onContinue }) => {
 
                         <Button
                             variant="primary"
-                            onClick={onContinue}
+                            type="submit"
                             className="mt-4 w-100"
                         >
                             Continue
