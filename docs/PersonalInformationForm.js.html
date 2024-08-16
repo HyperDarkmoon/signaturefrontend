@@ -1,4 +1,32 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: PersonalInformationForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: PersonalInformationForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Modal, Collapse } from 'react-bootstrap';
 import axios from 'axios';
 import DrawingCanvas from './DrawingCanvas';
@@ -14,7 +42,7 @@ import './FormStyles.css';
  * @param {Function} props.onSubmit - Function to handle submission of the form data.
  * @example
  * return (
- *   <PersonalInformationForm onSubmit={(data) => console.log('Submitted data:', data)} />
+ *   &lt;PersonalInformationForm onSubmit={(data) => console.log('Submitted data:', data)} />
  * );
  */
 const PersonalInformationForm = ({ onSubmit }) => {
@@ -34,7 +62,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
     /**
      * Handles changes in form input fields.
      *
-     * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+     * @param {React.ChangeEvent&lt;HTMLInputElement>} e - The change event.
      */
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,7 +72,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
     /**
      * Handles form submission. Validates the input and sets an error if validation fails.
      *
-     * @param {React.FormEvent<HTMLFormElement>} e - The form submit event.
+     * @param {React.FormEvent&lt;HTMLFormElement>} e - The form submit event.
      */
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -86,19 +114,19 @@ const PersonalInformationForm = ({ onSubmit }) => {
     };
 
     return (
-        <div>
-            <div className="arrow-container" onClick={() => setOpen(!open)}>
-                <div className={`arrow ${open ? 'up' : 'down'}`}></div>
-                <span>{open ? 'Personal Information' : 'Personal Information'}</span>
-            </div>
-            <Collapse in={open}>
-                <div>
-                    <h4 className="text-center mb-4">Personal Information</h4>
-                    {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="formFirstName">
-                            <Form.Label>First Name</Form.Label>
-                            <Form.Control
+        &lt;div>
+            &lt;div className="arrow-container" onClick={() => setOpen(!open)}>
+                &lt;div className={`arrow ${open ? 'up' : 'down'}`}>&lt;/div>
+                &lt;span>{open ? 'Personal Information' : 'Personal Information'}&lt;/span>
+            &lt;/div>
+            &lt;Collapse in={open}>
+                &lt;div>
+                    &lt;h4 className="text-center mb-4">Personal Information&lt;/h4>
+                    {error &amp;&amp; &lt;Alert variant="danger">{error}&lt;/Alert>}
+                    &lt;Form onSubmit={handleSubmit}>
+                        &lt;Form.Group controlId="formFirstName">
+                            &lt;Form.Label>First Name&lt;/Form.Label>
+                            &lt;Form.Control
                                 type="text"
                                 placeholder="Enter your first name"
                                 name="firstName"
@@ -106,11 +134,11 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        &lt;/Form.Group>
 
-                        <Form.Group controlId="formLastName" className="mt-3">
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
+                        &lt;Form.Group controlId="formLastName" className="mt-3">
+                            &lt;Form.Label>Last Name&lt;/Form.Label>
+                            &lt;Form.Control
                                 type="text"
                                 placeholder="Enter your last name"
                                 name="lastName"
@@ -118,11 +146,11 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        &lt;/Form.Group>
 
-                        <Form.Group controlId="formIdCard" className="mt-3">
-                            <Form.Label>ID Card</Form.Label>
-                            <Form.Control
+                        &lt;Form.Group controlId="formIdCard" className="mt-3">
+                            &lt;Form.Label>ID Card&lt;/Form.Label>
+                            &lt;Form.Control
                                 type="text"
                                 placeholder="Enter your ID card number"
                                 name="idCard"
@@ -130,11 +158,11 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        &lt;/Form.Group>
 
-                        <Form.Group controlId="formPhoneNumber" className="mt-3">
-                            <Form.Label>Phone Number</Form.Label>
-                            <Form.Control
+                        &lt;Form.Group controlId="formPhoneNumber" className="mt-3">
+                            &lt;Form.Label>Phone Number&lt;/Form.Label>
+                            &lt;Form.Control
                                 type="text"
                                 placeholder="Enter your phone number"
                                 name="phoneNumber"
@@ -142,11 +170,11 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        &lt;/Form.Group>
 
-                        <Form.Group controlId="formAddress" className="mt-3">
-                            <Form.Label>Address</Form.Label>
-                            <Form.Control
+                        &lt;Form.Group controlId="formAddress" className="mt-3">
+                            &lt;Form.Label>Address&lt;/Form.Label>
+                            &lt;Form.Control
                                 type="text"
                                 placeholder="Enter your address"
                                 name="address"
@@ -154,41 +182,64 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                        </Form.Group>
+                        &lt;/Form.Group>
 
-                        <Form.Group controlId="formSignature" className="mt-3">
-                            <Form.Label>Signature</Form.Label>
-                            <br />
-                            <Button onClick={handleSignatureClick} variant="primary">
+                        &lt;Form.Group controlId="formSignature" className="mt-3">
+                            &lt;Form.Label>Signature&lt;/Form.Label>
+                            &lt;br />
+                            &lt;Button onClick={handleSignatureClick} variant="primary">
                                 Draw Signature
-                            </Button>
-                            {formData.signature && <img src={formData.signature} alt="Signature" className="mt-2" />}
-                        </Form.Group>
+                            &lt;/Button>
+                            {formData.signature &amp;&amp; &lt;img src={formData.signature} alt="Signature" className="mt-2" />}
+                        &lt;/Form.Group>
 
-                        <Button
+                        &lt;Button
                             variant="primary"
                             type="submit"
                             className="mt-4 w-100"
                         >
                             Submit
-                        </Button>
-                    </Form>
-                </div>
-            </Collapse>
+                        &lt;/Button>
+                    &lt;/Form>
+                &lt;/div>
+            &lt;/Collapse>
 
-            <Modal show={showDrawingCanvas} onHide={() => setShowDrawingCanvas(false)} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Draw Signature</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <DrawingCanvas
+            &lt;Modal show={showDrawingCanvas} onHide={() => setShowDrawingCanvas(false)} centered>
+                &lt;Modal.Header closeButton>
+                    &lt;Modal.Title>Draw Signature&lt;/Modal.Title>
+                &lt;/Modal.Header>
+                &lt;Modal.Body>
+                    &lt;DrawingCanvas
                         onSave={handleCloseDrawingCanvas}
                         onClose={() => setShowDrawingCanvas(false)}
                     />
-                </Modal.Body>
-            </Modal>
-        </div>
+                &lt;/Modal.Body>
+            &lt;/Modal>
+        &lt;/div>
     );
 };
 
 export default PersonalInformationForm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#DrawingCanvas">DrawingCanvas</a></li><li><a href="global.html#PersonalInformationForm">PersonalInformationForm</a></li><li><a href="global.html#ProductList">ProductList</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#generatePDF">generatePDF</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Aug 16 2024 13:10:38 GMT+0100 (UTC+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
