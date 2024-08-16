@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-const UserRegistration = async (data) => {
+const UserRegistration = async ({ data, onSuccess, onError }) => {
     try {
-        // Access the actual form data from the data object
         const formData = data.formData;
 
-        // Construct the user object with form data
         const user = {
             username: formData.username,
             email: formData.email,
@@ -17,25 +15,23 @@ const UserRegistration = async (data) => {
             address: formData.address,
             signature: formData.signature ? formData.signature.split(',')[1] : '',
             offer: formData.selectedOffer,
+            item: formData.selectedItem,
         };
 
-        // Log the user object to verify its contents
-        console.log("user : ", user);
-
-        // Send POST request to the backend
         const response = await axios.post('http://localhost:8085/api/users/register', user, {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
-        // Handle successful registration
         if (response.status === 200) {
-            console.log('Registration successful!');
+            if (onSuccess) onSuccess(); // Trigger onSuccess callback
             return response.data;
         }
     } catch (error) {
-        // Error handling
+        if (onError) {
+            onError(error);
+        }
         if (error.response && error.response.data) {
             console.error('Backend validation error:', error.response.data);
             throw new Error(error.response.data);

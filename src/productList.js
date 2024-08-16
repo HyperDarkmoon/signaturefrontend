@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Dropdown, DropdownButton, Button } from 'react-bootstrap';
+import { Dropdown, DropdownButton, Button, Modal } from 'react-bootstrap';
 import RegistrationForm from './RegistrationForm';
-import PersonalInformationForm from './PersonalInformationForm';
+import PersonalInformationForm from './PersonalInformationForm.js';
 import './productList.css';
 import UserRegistration from './UserRegistration';
 
@@ -14,6 +14,8 @@ const ProductList = () => {
     const [showBlankCard, setShowBlankCard] = useState(false);
     const [personalInfoData, setPersonalInfoData] = useState(null);
     const [registrationData, setRegistrationData] = useState(null);
+    const [showOverlay, setShowOverlay] = useState(false);
+    const [showErrorOverlay, setShowErrorOverlay] = useState(false); // New state for error overlay
 
     const items = [
         {
@@ -32,7 +34,6 @@ const ProductList = () => {
 
     const handleItemClick = (itemId) => {
         setSelectedItem(selectedItem === itemId ? null : itemId);
-        resetState();
     };
 
     const handleOfferSelect = (offer) => {
@@ -56,12 +57,10 @@ const ProductList = () => {
 
     const handlePersonalInfoSubmit = (data) => {
         setPersonalInfoData(data);
-        console.log('Personal Information Submitted:', data);
     };
 
     const handleRegistrationFormData = (data) => {
         setRegistrationData(data);
-        console.log('Registration Form Data:', data);
     };
 
     const handleSubmit = async () => {
@@ -70,25 +69,25 @@ const ProductList = () => {
                 ...registrationData,
                 ...personalInfoData,
                 selectedOffer,
+                selectedItem: selectedItemDetails.name,
             };
-
-            console.log('Submitting combined data:', combinedData);
-
+    
             try {
                 await UserRegistration({
-                    formData: combinedData,
+                    data: { formData: combinedData },
                     onSuccess: () => {
-                        console.log('Registration successful!');
+                        setShowOverlay(true); // Show overlay on success
+                        resetState();          // Reset the state after submission
                     },
                     onError: (error) => {
-                        console.error('Error during registration:', error);
+                        setShowErrorOverlay(true); // Show error overlay if forms are not filled out
                     }
                 });
             } catch (error) {
-                console.error('Error submitting data:', error);
+                setShowErrorOverlay(true); // Show error overlay if forms are not filled out
             }
         } else {
-            console.log('Both forms must be filled out before submission.');
+            setShowErrorOverlay(true); // Show error overlay if forms are not filled out
         }
     };
 
@@ -96,6 +95,9 @@ const ProductList = () => {
         setSelectedOffer('Select Offer');
         setShowRegistration(false);
         setShowBlankCard(false);
+        setSelectedItem(null);
+        setPersonalInfoData(null);
+        setRegistrationData(null);
     };
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
@@ -181,17 +183,57 @@ const ProductList = () => {
                                 </div>
                             </div>
                         )}
+
+                        {showBlankCard && ( // Conditionally render the submit button
+                            <Button
+                                variant="primary"
+                                onClick={handleSubmit}
+                                className="w-50 mt-3"
+                            >
+                                Submit
+                            </Button>
+                        )}
                     </div>
                 </div>
             )}
 
-            <Button
-                variant="primary"
-                onClick={handleSubmit}
-                className="w-50 mt-3"
+            {/* Success Overlay Modal */}
+            <Modal
+                show={showOverlay}
+                onHide={() => setShowOverlay(false)}
+                centered
             >
-                Submit
-            </Button>
+                <Modal.Header closeButton>
+                    <Modal.Title>Success</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Your registration was successful!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => setShowOverlay(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Error Overlay Modal */}
+            <Modal
+                show={showErrorOverlay}
+                onHide={() => setShowErrorOverlay(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Error</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Both forms must be filled out before submission.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={() => setShowErrorOverlay(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

@@ -40,33 +40,8 @@ const PersonalInformationForm = ({ onSubmit }) => {
             return;
         }
 
-        try {
-            // Check phone number and ID card with the backend
-            const response = await axios.get('http://localhost:8085/api/users/infocheck', {
-                params: {
-                    phone: phoneNumber,
-                    idCard: idCard
-                }
-            });
-            const { phoneExists, idCardExists } = response.data;
-            
-            if (phoneExists) {
-                setError('Phone number already exists.');
-                return;
-            }
-            if (idCardExists) {
-                setError('ID card number already exists.');
-                return;
-            }
-
-            setError('');
-            if (onSubmit) onSubmit(formData);
-        } catch (error) {
-            setError('An error occurred while checking information.');
-            console.error('Error checking user info:', error);
-        }
-    };
-
+    }
+    
     const handleSignatureClick = () => {
         setShowDrawingCanvas(true);
     };
@@ -157,10 +132,6 @@ const PersonalInformationForm = ({ onSubmit }) => {
                             </Button>
                             {formData.signature && <img src={formData.signature} alt="Signature" className="mt-2" />}
                         </Form.Group>
-
-                        <Button variant="primary" type="submit" className="mt-4 w-100">
-                            Submit
-                        </Button>
                     </Form>
                 </div>
             </Collapse>
