@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Modal, Collapse } from 'react-bootstrap';
-import axios from 'axios';
 import DrawingCanvas from './DrawingCanvas';
 import './FormStyles.css';
 
@@ -36,7 +35,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
             onSubmit(formData);
         }
     }, [formData, onSubmit]);
-    
+
     /**
         * Handles changes in form input fields.
         *

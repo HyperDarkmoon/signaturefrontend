@@ -50,7 +50,6 @@ const generatePDF = async (username) => {
                 { text: `Address: ${user.address}`, margin: [0, 0, 0, 10] },
                 { text: `Offer: ${user.offer}`, margin: [0, 0, 0, 10] },
                 { text: `Item: ${user.item}`, margin: [0, 0, 0, 10] },
-                // Optional: Include the signature as an image if it exists
                 user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 300, margin: [0, 20] } : {}
             ],
             styles: {
