@@ -223,7 +223,7 @@ const ProductList = () => {
 
                                 <Button
                                     className="mt-3"
-                                    variant="primary"
+                                    variant="danger"
                                     onClick={handleRegisterClick}
                                 >
                                     Register
@@ -262,7 +262,7 @@ const ProductList = () => {
 
                         {showBlankCard && ( // Conditionally render the submit button
                             <Button
-                                variant="primary"
+                                variant="danger"
                                 onClick={handleSubmit}
                                 className="w-50 mt-3"
                             >
@@ -286,7 +286,7 @@ const ProductList = () => {
                     <p>Your registration was successful!</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={() => setShowOverlay(false)}>
+                    <Button variant="danger" onClick={() => setShowOverlay(false)}>
                         Close
                     </Button>
                     <Button variant="danger" onClick={handleGeneratePDF}>

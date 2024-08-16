@@ -159,14 +159,14 @@ const PersonalInformationForm = ({ onSubmit }) => {
                         <Form.Group controlId="formSignature" className="mt-3">
                             <Form.Label>Signature</Form.Label>
                             <br />
-                            <Button onClick={handleSignatureClick} variant="primary">
+                            <Button onClick={handleSignatureClick} variant="danger">
                                 Draw Signature
                             </Button>
                             {formData.signature && <img src={formData.signature} alt="Signature" className="mt-2" />}
                         </Form.Group>
 
                         <Button
-                            variant="primary"
+                            variant="danger"
                             type="submit"
                             className="mt-4 w-100"
                         >

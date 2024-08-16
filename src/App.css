@@ -1,3 +1,5 @@
+/* App.css */
+
 .App {
   text-align: center;
 }
@@ -37,9 +39,6 @@
   }
 }
 
-/* App.css */
-/* App.css */
-/* App.css */
 .drawing-canvas-widget {
   position: fixed;
   top: 50%;

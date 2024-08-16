@@ -176,7 +176,7 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
                                     </Form.Group>
 
                                     <Button
-                                        variant="primary"
+                                        variant="danger"
                                         type="submit"
                                         className="mt-4 w-100"
                                     >
