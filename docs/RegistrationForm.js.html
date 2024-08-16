@@ -1,4 +1,32 @@
-import React, { useState } from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: RegistrationForm.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: RegistrationForm.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from 'react';
 import { Button, Form, Alert, Collapse } from 'react-bootstrap';
 import axios from 'axios';
 import './FormStyles.css'; // Import the CSS file where you added the arrow styles
@@ -16,7 +44,7 @@ import './FormStyles.css'; // Import the CSS file where you added the arrow styl
  * @param {Function} props.onData - Function to pass form data to the parent component.
  * @example
  * return (
- *   <RegistrationForm 
+ *   &lt;RegistrationForm 
  *     show={true} 
  *     onClose={() => console.log('Form closed')} 
  *     onContinue={() => console.log('Proceeding to next step')} 
@@ -39,7 +67,7 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
     /**
      * Handles changes in form input fields.
      *
-     * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
+     * @param {React.ChangeEvent&lt;HTMLInputElement>} e - The change event.
      */
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,11 +79,11 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
      *
      * @param {string} username - The username to check.
      * @param {string} email - The email to check.
-     * @returns {Promise<{usernameExists: boolean, emailExists: boolean}>} - A promise resolving to the existence status.
+     * @returns {Promise&lt;{usernameExists: boolean, emailExists: boolean}>} - A promise resolving to the existence status.
      */
     const checkUserExistence = async (username, email) => {
         try {
-            const response = await axios.get(`http://localhost:8085/api/users/check?username=${username}&email=${email}`);
+            const response = await axios.get(`http://localhost:8085/api/users/check?username=${username}&amp;email=${email}`);
             return response.data;
         } catch (error) {
             console.error('Error checking user existence:', error);
@@ -66,7 +94,7 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
     /**
      * Handles form submission, validates input, checks for existing users, and passes data to the parent component.
      *
-     * @param {React.FormEvent<HTMLFormElement>} e - The form submit event.
+     * @param {React.FormEvent&lt;HTMLFormElement>} e - The form submit event.
      */
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -106,26 +134,26 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
     };
 
     return (
-        <>
-            <div>
-                <div
+        &lt;>
+            &lt;div>
+                &lt;div
                     className="arrow-container"
                     onClick={() => setOpen(!open)}
                 >
-                    <div className={`arrow ${open ? 'up' : 'down'}`}></div>
-                    <span>{open ? 'Registration Form' : 'Registration Form'}</span>
-                </div>
-                <Collapse in={open}>
-                    <div>
-                        <div>
-                            <div className="card-body">
-                                <h4 className="text-center mb-4">Registration Form</h4>
-                                {success && <Alert variant="success">{success}</Alert>}
-                                {Object.keys(errors).length > 0 && <Alert variant="danger">{Object.values(errors).join(', ')}</Alert>}
-                                <Form onSubmit={handleSubmit}>
-                                    <Form.Group controlId="formUsername">
-                                        <Form.Label>Username</Form.Label>
-                                        <Form.Control
+                    &lt;div className={`arrow ${open ? 'up' : 'down'}`}>&lt;/div>
+                    &lt;span>{open ? 'Registration Form' : 'Registration Form'}&lt;/span>
+                &lt;/div>
+                &lt;Collapse in={open}>
+                    &lt;div>
+                        &lt;div>
+                            &lt;div className="card-body">
+                                &lt;h4 className="text-center mb-4">Registration Form&lt;/h4>
+                                {success &amp;&amp; &lt;Alert variant="success">{success}&lt;/Alert>}
+                                {Object.keys(errors).length > 0 &amp;&amp; &lt;Alert variant="danger">{Object.values(errors).join(', ')}&lt;/Alert>}
+                                &lt;Form onSubmit={handleSubmit}>
+                                    &lt;Form.Group controlId="formUsername">
+                                        &lt;Form.Label>Username&lt;/Form.Label>
+                                        &lt;Form.Control
                                             type="text"
                                             placeholder="Enter username"
                                             name="username"
@@ -133,12 +161,12 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
                                             onChange={handleChange}
                                             isInvalid={!!errors.username}
                                         />
-                                        <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-                                    </Form.Group>
+                                        &lt;Form.Control.Feedback type="invalid">{errors.username}&lt;/Form.Control.Feedback>
+                                    &lt;/Form.Group>
 
-                                    <Form.Group controlId="formEmail" className="mt-3">
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control
+                                    &lt;Form.Group controlId="formEmail" className="mt-3">
+                                        &lt;Form.Label>Email&lt;/Form.Label>
+                                        &lt;Form.Control
                                             type="email"
                                             placeholder="Enter email"
                                             name="email"
@@ -146,12 +174,12 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
                                             onChange={handleChange}
                                             isInvalid={!!errors.email}
                                         />
-                                        <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-                                    </Form.Group>
+                                        &lt;Form.Control.Feedback type="invalid">{errors.email}&lt;/Form.Control.Feedback>
+                                    &lt;/Form.Group>
 
-                                    <Form.Group controlId="formPassword" className="mt-3">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control
+                                    &lt;Form.Group controlId="formPassword" className="mt-3">
+                                        &lt;Form.Label>Password&lt;/Form.Label>
+                                        &lt;Form.Control
                                             type="password"
                                             placeholder="Enter password"
                                             name="password"
@@ -159,12 +187,12 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
                                             onChange={handleChange}
                                             isInvalid={!!errors.password}
                                         />
-                                        <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                                    </Form.Group>
+                                        &lt;Form.Control.Feedback type="invalid">{errors.password}&lt;/Form.Control.Feedback>
+                                    &lt;/Form.Group>
 
-                                    <Form.Group controlId="formConfirmPassword" className="mt-3">
-                                        <Form.Label>Confirm Password</Form.Label>
-                                        <Form.Control
+                                    &lt;Form.Group controlId="formConfirmPassword" className="mt-3">
+                                        &lt;Form.Label>Confirm Password&lt;/Form.Label>
+                                        &lt;Form.Control
                                             type="password"
                                             placeholder="Confirm password"
                                             name="confirmPassword"
@@ -172,24 +200,47 @@ const RegistrationForm = ({ show, onClose, onContinue, onData }) => {
                                             onChange={handleChange}
                                             isInvalid={!!errors.confirmPassword}
                                         />
-                                        <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-                                    </Form.Group>
+                                        &lt;Form.Control.Feedback type="invalid">{errors.confirmPassword}&lt;/Form.Control.Feedback>
+                                    &lt;/Form.Group>
 
-                                    <Button
-                                        variant="danger"
+                                    &lt;Button
+                                        variant="primary"
                                         type="submit"
                                         className="mt-4 w-100"
                                     >
                                         Continue
-                                    </Button>
-                                </Form>
-                            </div>
-                        </div>
-                    </div>
-                </Collapse>
-            </div>
-        </>
+                                    &lt;/Button>
+                                &lt;/Form>
+                            &lt;/div>
+                        &lt;/div>
+                    &lt;/div>
+                &lt;/Collapse>
+            &lt;/div>
+        &lt;/>
     );
 };
 
 export default RegistrationForm;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#DrawingCanvas">DrawingCanvas</a></li><li><a href="global.html#PersonalInformationForm">PersonalInformationForm</a></li><li><a href="global.html#ProductList">ProductList</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#generatePDF">generatePDF</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Aug 16 2024 13:10:38 GMT+0100 (UTC+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

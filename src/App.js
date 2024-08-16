@@ -1,10 +1,11 @@
 import './App.css';
-import RegistrationForm from './RegistrationForm.js';
+import Dashboard from './Dashboard.js'
+import ProductList from './productList.js';
 
 function App() {
   return (
     <div className="App">
-      <RegistrationForm />
+      <ProductList />
     </div>
   );
 }
