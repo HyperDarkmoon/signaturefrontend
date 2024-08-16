@@ -5,6 +5,7 @@ import RegistrationForm from './RegistrationForm';
 import PersonalInformationForm from './PersonalInformationForm.js';
 import './productList.css';
 import UserRegistration from './UserRegistration';
+import generatePDF from './pdfGenerator.js';
 
 const ProductList = () => {
     const [selectedItem, setSelectedItem] = useState(null);
@@ -91,14 +92,26 @@ const ProductList = () => {
         }
     };
 
+    const handleGeneratePDF = () => {
+        const username = registrationData.username;
+        generatePDF(username);
+
+    }
+
     const resetState = () => {
         setSelectedOffer('Select Offer');
         setShowRegistration(false);
         setShowBlankCard(false);
         setSelectedItem(null);
         setPersonalInfoData(null);
-        setRegistrationData(null);
+    
+        // Preserve the username in registrationData
+        setRegistrationData(prevState => ({
+            ...prevState,
+            username: prevState?.username || null
+        }));
     };
+    
 
     const selectedItemDetails = items.find(item => item.id === selectedItem);
 
@@ -212,6 +225,9 @@ const ProductList = () => {
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowOverlay(false)}>
                         Close
+                    </Button>
+                    <Button variant="danger" onClick={handleGeneratePDF}>
+                        Download contract PDF
                     </Button>
                 </Modal.Footer>
             </Modal>
