@@ -25,6 +25,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
         phoneNumber: '',
         address: '',
         signature: '',
+        dob: '',
     });
     const [error, setError] = useState('');
     const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
@@ -142,7 +143,17 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 required
                             />
                         </Form.Group>
-
+                        <Form.Group controlId="formDob" className="mt-3">
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control
+                                type="date"
+                                placeholder="Enter your date of birth"
+                                name="dob"
+                                value={formData.dob}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
                         <Form.Group controlId="formAddress" className="mt-3">
                             <Form.Label>Address</Form.Label>
                             <Form.Control

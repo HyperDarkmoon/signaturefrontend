@@ -26,6 +26,8 @@ const UserRegistration = async ({ data, onSuccess, onError }) => {
             signature: formData.signature ? formData.signature.split(',')[1] : '',
             offer: formData.selectedOffer,
             item: formData.selectedItem,
+            dob: formData.dob,
+            date: new Date().toLocaleDateString(),
         };
 
         // Send a POST request to the backend server for user registration

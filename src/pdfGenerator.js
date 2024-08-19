@@ -6,18 +6,32 @@ import axios from 'axios';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 /**
- * Generates and downloads a PDF containing user information.
+ * Fetches the Base64 string from a text file.
  *
- * This function fetches user data from the server based on the provided username,
- * creates a PDF document with the fetched data, and triggers a download of the PDF.
+ * @param {string} filePath - The path to the text file containing the Base64 string.
+ * @returns {Promise<string>} - A promise that resolves to the Base64 string.
+ * @throws {Error} - Throws an error if the file cannot be read.
+ */
+const fetchBase64FromFile = async (filePath) => {
+    try {
+        const response = await fetch(filePath);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch file from ${filePath}`);
+        }
+        const text = await response.text();
+        return text.trim(); // Trim to remove any extra whitespace or newlines
+    } catch (error) {
+        console.error('Error fetching Base64 string:', error);
+        throw error;
+    }
+};
+
+/**
+ * Generates and downloads a PDF containing user information.
  *
  * @param {string} username - The username of the user whose information is to be fetched and included in the PDF.
  * @returns {Promise<void>} - A promise that resolves when the PDF has been generated and downloaded.
  * @throws {Error} - Throws an error if there is an issue fetching user information or generating the PDF.
- *
- * @example
- * // Example usage
- * generatePDF('john_doe');
  */
 const generatePDF = async (username) => {
     try {
@@ -35,28 +49,106 @@ const generatePDF = async (username) => {
             signature: response.data.signature,
             offer: response.data.offer,
             item: response.data.item,
+            dob: response.data.dob,
+            date: new Date().toLocaleDateString(),
         };
+
+        // Fetch the Base64 string from the text file
+        const imageBase64 = await fetchBase64FromFile('/assets/imgData.txt');
 
         // Define the PDF document structure using the fetched user data
         const documentDefinition = {
             content: [
-                { text: 'User Information', style: 'header' },
-                { text: `Username: ${user.username}`, margin: [0, 0, 0, 10] },
-                { text: `Email: ${user.email}`, margin: [0, 0, 0, 10] },
+                {
+                    columns: [
+                        { text: 'SALES CONTRACT', style: 'contractHeader', alignment: 'left' },
+                        { image: imageBase64, width: 100, alignment: 'right' }
+                    ]
+                },
+                { text: 'This Sales Contract is made and entered into by and between the following parties:', margin : [0, 0, 0, 10]},
+                { text: 'Buyer: ' + user.firstName + ' ' + user.lastName,margin: [0, 0, 0, 10] },
+                { text: 'Seller: OOREDOO', margin: [0, 0, 0, 10] },
+                { text: 'Item: ' + user.item, margin: [0, 0, 0, 10] },
+                { text: 'Offer: ' + user.offer,margin: [0, 0, 0, 10] },
+                { text: 'Date: ' + user.date, margin: [0, 0, 0, 10] },
+                {
+
+                    table: {
+                        widths: ['*'], // This makes the table cell take up the full width
+                        body: [
+                            [
+                                {
+                                    text: 'Personal information',
+                                    style: 'header',
+                                    fillColor: 'red',
+                                    color: 'white',
+                                    margin: [0, 5, 0, 5], // Padding within the bar
+                                    alignment: 'left'
+                                }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders' // Remove the table borders
+                },
                 { text: `First Name: ${user.firstName}`, margin: [0, 0, 0, 10] },
                 { text: `Last Name: ${user.lastName}`, margin: [0, 0, 0, 10] },
                 { text: `ID Card: ${user.idCard}`, margin: [0, 0, 0, 10] },
                 { text: `Phone: ${user.phone}`, margin: [0, 0, 0, 10] },
+                { text: `Date of Birth: ${user.dob}`, margin: [0, 0, 0, 10] },
+                {
+                    table: {
+                        widths: ['*'], // This makes the table cell take up the full width
+                        body: [
+                            [
+                                {
+                                    text: 'Coordinates',
+                                    style: 'header',
+                                    fillColor: 'red',
+                                    color: 'white',
+                                    margin: [0, 5, 0, 5], // Padding within the bar
+                                    alignment: 'left'
+                                }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders' // Remove the table borders
+                },
                 { text: `Address: ${user.address}`, margin: [0, 0, 0, 10] },
-                { text: `Offer: ${user.offer}`, margin: [0, 0, 0, 10] },
-                { text: `Item: ${user.item}`, margin: [0, 0, 0, 10] },
-                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 300, margin: [0, 20] } : {}
+                { text: 'email: ' + user.email, margin: [0, 0, 0, 10] },
+                { text: 'phone: ' + user.phone, margin: [0, 0, 0, 10] },
+                {
+                    table: {
+                        widths: ['*'], // This makes the table cell take up the full width
+                        body: [
+                            [
+                                {
+                                    text: 'Signature',
+                                    style: 'header',
+                                    fillColor: 'red',
+                                    color: 'white',
+                                    margin: [0, 5, 0, 5], // Padding within the bar
+                                    alignment: 'left'
+                                }
+                            ]
+                        ]
+                    },
+                    layout: 'noBorders' // Remove the table borders
+                },
+                { text: 'I agree to the terms and conditions of the sales contract.', margin: [0, 0, 0, 10] },
+                {text : 'Signature:', margin: [0, 0, 0, 10] },
+                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 150, margin: [0, 20] } : {}
             ],
             styles: {
+                contractHeader: {
+                    fontSize: 18,
+                    bold: true,
+                    color: 'red',
+                    margin: [0, 20, 0, 10]
+                },
                 header: {
                     fontSize: 18,
                     bold: true,
-                    margin: [0, 20, 0, 10]
+                    margin: [0, 20, 0, 50]
                 },
                 normal: {
                     fontSize: 12
@@ -68,7 +160,7 @@ const generatePDF = async (username) => {
         // Generate the PDF and trigger the download
         pdfMake.createPdf(documentDefinition).download('user-information.pdf');
     } catch (error) {
-        console.error('Error fetching user information:', error);
+        console.error('Error generating PDF:', error);
     }
 };
 
