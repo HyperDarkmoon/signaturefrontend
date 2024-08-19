@@ -77,3 +77,7 @@
   cursor: pointer;
   line-height: 1;
 }
+
+.main-content {
+  padding-top: 60px; /* Adjust based on navbar height */
+}

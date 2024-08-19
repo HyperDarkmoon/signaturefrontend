@@ -1,0 +1,34 @@
+.navbar-logo {
+    height: 40px; /* Adjust the height of the logo as needed */
+    width: auto; /* Adjust the width of the logo as needed */
+    margin-right: 15px; /* Add space between the logo and other content */
+}
+
+.nav-item {
+    margin-right: 10px; /* Add space between nav items */
+}
+
+/* Remove default margin and padding from the navbar */
+.navbar {
+    margin-top: 0 !important; /* Ensure there's no margin on top */
+    padding-top: 0 !important; /* Remove padding on top */
+    padding-bottom: 0 !important; /* Remove padding on bottom, if needed */
+}
+
+/* Remove default margin from the container inside navbar */
+.navbar .container {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Remove margin from navbar items */
+.nav-item {
+    margin-right: 10px; /* Maintain spacing between nav items */
+    margin-top: 0; /* Ensure no top margin */
+}
+
+/* Optional: Remove margin from the navbar-brand if needed */
+.navbar-brand {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
