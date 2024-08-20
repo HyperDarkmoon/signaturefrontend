@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: getContracts.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,37 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: getContracts.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import axios from "axios";
 
+/**
+ * Fetches the contracts from the server.
+ *
+ * @returns {Promise&lt;Array>} - A promise that resolves to the list of users.
+ * @throws {Error} - Throws an error if there is an issue fetching the contracts.
+ */
+const getContracts = async () => {
+    try {
+        const response = await axios.get('http://localhost:8085/api/users/allusers');
+        return response.data; // Directly return the list of users
+    } catch (error) {
+        console.error('Error fetching contracts:', error);
+        throw error;
+    }
+}
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+export default getContracts;
+</code></pre>
+        </article>
+    </section>
 
 
 
