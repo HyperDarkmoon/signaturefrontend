@@ -50,7 +50,7 @@ const generatePDF = async (username) => {
             offer: response.data.offer,
             item: response.data.item,
             dob: response.data.dob,
-            date: new Date().toLocaleDateString(),
+            date: response.data.date,
         };
 
         // Fetch the Base64 string from the text file
@@ -136,7 +136,7 @@ const generatePDF = async (username) => {
                 },
                 { text: 'I agree to the terms and conditions of the sales contract.', margin: [0, 0, 0, 10] },
                 {text : 'Signature:', margin: [0, 0, 0, 10] },
-                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 150, margin: [0, 20] } : {}
+                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 150, margin: [0, 20], alignment: 'middle'} : {}
             ],
             styles: {
                 contractHeader: {
@@ -158,7 +158,7 @@ const generatePDF = async (username) => {
         };
 
         // Generate the PDF and trigger the download
-        pdfMake.createPdf(documentDefinition).download('user-information.pdf');
+        pdfMake.createPdf(documentDefinition).download(username + ' Contract.pdf');
     } catch (error) {
         console.error('Error generating PDF:', error);
     }
