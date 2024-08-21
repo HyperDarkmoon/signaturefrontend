@@ -97,3 +97,17 @@
     text-align: center; /* Center the text inside the card */
 }
 
+.device-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.device-image {
+    width: 80px; /* Adjust the width as needed */
+    height: 80px; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+    margin-bottom: 5px; /* Space between image and text */
+}

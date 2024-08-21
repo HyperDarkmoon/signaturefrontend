@@ -7,29 +7,12 @@ import './productList.css';
 import UserRegistration from './UserRegistration';
 import generatePDF from './pdfGenerator.js';
 
-/**
- * ProductList component that displays a list of products, allows selection,
- * and handles registration and personal information forms.
- *
- * @component
- * @example
- * return (
- *   <ProductList />
- * );
- */
-const ProductList = () => {
-    /**
-     * @typedef {Object} Item
-     * @property {number} id - The unique identifier for the item.
-     * @property {string} name - The name of the item.
-     * @property {string} details - Description of the item.
-     * @property {string[]} offers - List of available offers for the item.
-     */
+// Import the images from the assets folder
+import device1Image from './assets/device1.jpg';
+import device2Image from './assets/device2.jpg';
+import device3Image from './assets/device3.jpg';
 
-    /**
-     * List of available items.
-     * @type {Item[]}
-     */
+const ProductList = () => {
     const items = [
         {
             id: 1,
@@ -40,88 +23,75 @@ const ProductList = () => {
         {
             id: 2,
             name: 'MBB Device',
-            details: 'Choose your offer',
-            offers: ['Offer 4', 'Offer 5', 'Offer 6'],
+            details: 'Choose your device',
+            device: [
+                { name: '4G Box Limited', image: device1Image },
+                { name: '4G Box Unlimited', image: device2Image },
+                { name: '4G Key', image: device3Image },
+            ],
+            offer: {
+                '4G Box Limited': ['25 GB', '75 GB', '125 GB'],
+                '4G Box Unlimited': ['20Mb/s', '50Mb/s', '100Mb/s'],
+                '4G Key': ['10 GB', '20 GB', '30 GB'],
+            },
         },
     ];
 
     const [selectedItem, setSelectedItem] = useState(null);
-    const [selectedOffer, setSelectedOffer] = useState('Select Offer');
+    var [selectedOffer, setSelectedOffer] = useState('Select Offer');
+    const [selectedDevice, setselectedDevice] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showRegistration, setShowRegistration] = useState(false);
     const [showBlankCard, setShowBlankCard] = useState(false);
     const [personalInfoData, setPersonalInfoData] = useState(null);
     const [registrationData, setRegistrationData] = useState(null);
     const [showOverlay, setShowOverlay] = useState(false);
-    const [showErrorOverlay, setShowErrorOverlay] = useState(false); // New state for error overlay
+    const [showErrorOverlay, setShowErrorOverlay] = useState(false);
 
-    /**
-     * Handles item click to select or deselect an item.
-     *
-     * @param {number} itemId - The id of the item to select or deselect.
-     */
     const handleItemClick = (itemId) => {
         setSelectedItem(selectedItem === itemId ? null : itemId);
+        setselectedDevice(null); // Reset selected device when switching items
+        setSelectedOffer('Select Offer'); // Reset selected offer when switching items
     };
 
-    /**
-     * Handles selection of an offer from the dropdown.
-     *
-     * @param {string} offer - The selected offer.
-     */
+    const handledeviceelect = (device) => {
+        setselectedDevice(device);
+        setSelectedOffer('Select Offer'); // Reset selected offer when switching device
+    };
+
     const handleOfferSelect = (offer) => {
         setSelectedOffer(offer);
         setDropdownOpen(false);
     };
 
-    /**
-     * Toggles the state of the dropdown menu.
-     *
-     * @param {boolean} isOpen - The open state of the dropdown.
-     */
     const handleDropdownToggle = (isOpen) => {
         setDropdownOpen(isOpen);
     };
 
-    /**
-     * Shows the registration form if an offer is selected.
-     */
     const handleRegisterClick = () => {
         if (selectedOffer !== 'Select Offer') {
             setShowRegistration(true);
         }
     };
 
-    /**
-     * Shows the blank card for personal information form.
-     */
     const handleContinueClick = () => {
         setShowBlankCard(true);
     };
 
-    /**
-     * Handles submission of personal information form data.
-     *
-     * @param {Object} data - The data from the personal information form.
-     */
     const handlePersonalInfoSubmit = (data) => {
         setPersonalInfoData(data);
     };
 
-    /**
-     * Handles submission of registration form data.
-     *
-     * @param {Object} data - The data from the registration form.
-     */
     const handleRegistrationFormData = (data) => {
         setRegistrationData(data);
     };
 
-    /**
-     * Submits the combined registration and personal information data.
-     * Shows success or error overlay based on the submission result.
-     */
     const handleSubmit = async () => {
+
+        if (selectedItemDetails.name === 'MBB Device') {
+            selectedOffer = selectedItemDetails.name + ' ' + selectedDevice + ' ' + selectedOffer;
+        }
+
         if (registrationData && personalInfoData) {
             const combinedData = {
                 ...registrationData,
@@ -129,7 +99,7 @@ const ProductList = () => {
                 selectedOffer,
                 selectedItem: selectedItemDetails.name,
             };
-    
+
             try {
                 await UserRegistration({
                     data: { formData: combinedData },
@@ -149,9 +119,6 @@ const ProductList = () => {
         }
     };
 
-    /**
-     * Generates a PDF based on the registration data.
-     */
     const handleGeneratePDF = () => {
         const username = registrationData?.username;
         if (username) {
@@ -159,16 +126,14 @@ const ProductList = () => {
         }
     };
 
-    /**
-     * Resets the state of the component while preserving the username in registrationData.
-     */
     const resetState = () => {
         setSelectedOffer('Select Offer');
         setShowRegistration(false);
         setShowBlankCard(false);
         setSelectedItem(null);
+        setselectedDevice(null);
         setPersonalInfoData(null);
-    
+
         // Preserve the username in registrationData
         setRegistrationData(prevState => ({
             ...prevState,
@@ -204,22 +169,63 @@ const ProductList = () => {
                                 <h4>{selectedItemDetails.name}</h4>
                                 <p>{selectedItemDetails.details}</p>
 
-                                <DropdownButton
-                                    id="dropdown-basic-button"
-                                    title={selectedOffer}
-                                    variant="secondary"
-                                    onToggle={handleDropdownToggle}
-                                    className="dropdown-button"
-                                >
-                                    {selectedItemDetails.offers.map((offer, index) => (
-                                        <Dropdown.Item
-                                            key={index}
-                                            onClick={() => handleOfferSelect(offer)}
-                                        >
-                                            {offer}
-                                        </Dropdown.Item>
-                                    ))}
-                                </DropdownButton>
+                                {selectedItemDetails.name === 'MBB Device' ? (
+                                    // Render device boxes with images for MBB Device
+                                    <div className="d-flex justify-content-around">
+                                        {selectedItemDetails.device.map((device, index) => (
+                                            <Button
+                                                key={index}
+                                                variant={selectedDevice === device.name ? "primary" : "secondary"}
+                                                onClick={() => handledeviceelect(device.name)}
+                                                className="device-button"
+                                            >
+                                                <img
+                                                    src={device.image}
+                                                    alt={device.name}
+                                                    className="device-image"
+                                                />
+                                                <span>{device.name}</span>
+                                            </Button>
+                                        ))}
+
+                                    </div>
+                                ) : (
+                                    <DropdownButton
+                                        id="dropdown-basic-button"
+                                        title={selectedOffer}
+                                        variant="secondary"
+                                        onToggle={handleDropdownToggle}
+                                        className="dropdown-button"
+                                    >
+                                        {selectedItemDetails.offers.map((offer, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => handleOfferSelect(offer)}
+                                            >
+                                                {offer}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </DropdownButton>
+                                )}
+
+                                {selectedDevice && (
+                                    <DropdownButton
+                                        id="dropdown-device-button"
+                                        title={selectedOffer}
+                                        variant="secondary"
+                                        onToggle={handleDropdownToggle}
+                                        className="dropdown-button mt-3"
+                                    >
+                                        {selectedItemDetails.offer[selectedDevice].map((offer, index) => (
+                                            <Dropdown.Item
+                                                key={index}
+                                                onClick={() => handleOfferSelect(offer)}
+                                            >
+                                                {offer}
+                                            </Dropdown.Item>
+                                        ))}
+                                    </DropdownButton>
+                                )}
 
                                 <Button
                                     className="mt-3"
@@ -305,7 +311,7 @@ const ProductList = () => {
                     <Modal.Title>Error</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <p>Both forms must be filled out before submission.</p>
+                    <p>Both forms must be filled out before submission!</p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={() => setShowErrorOverlay(false)}>
