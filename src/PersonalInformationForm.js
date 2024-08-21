@@ -26,6 +26,8 @@ const PersonalInformationForm = ({ onSubmit }) => {
         address: '',
         signature: '',
         dob: '',
+        idCardFront: '',
+        idCardBack: '',
     });
     const [error, setError] = useState('');
     const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
@@ -43,10 +45,28 @@ const PersonalInformationForm = ({ onSubmit }) => {
         * @param {React.ChangeEvent<HTMLInputElement>} e - The change event.
         */
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, files } = e.target;
+        
+        if (files && files.length > 0) {
+            const updatedFormData = { ...formData };
+            
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    if (name === 'idCardFront') {
+                        updatedFormData.idCardFront = reader.result;
+                    } else if (name === 'idCardBack') {
+                        updatedFormData.idCardBack = reader.result;
+                    }
+                    setFormData(updatedFormData);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            setFormData({ ...formData, [name]: e.target.value });
+        }
     };
-
+    
     /**
         * Handles form submission. Validates the input and sets an error if validation fails.
         *
@@ -54,13 +74,22 @@ const PersonalInformationForm = ({ onSubmit }) => {
         */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, idCard, phoneNumber, address, signature } = formData;
+        const { firstName, lastName, idCard, phoneNumber, address, signature, idCardFront, idCardBack } = formData;
         if (!firstName || !lastName || !idCard || !phoneNumber || !address) {
             setError('All fields are required.');
             return;
         }
         if (!signature) {
             setError('Signature is required.');
+            return;
+        }
+        if (!idCardFront) {
+            setError('ID Card Image is required.');
+            return;
+        }
+
+        if (!idCardBack) { 
+            setError('ID Card Image is required.');
             return;
         }
 
@@ -165,7 +194,28 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 required
                             />
                         </Form.Group>
-
+                        <Form.Group controlId="formidCardFront" className="mt-3">
+                            <Form.Label>ID Card Front Image</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                name="idCardFront"
+                                onChange={handleChange}
+                                required
+                            />
+                            {formData.idCardFront && <img src={formData.idCardFront} alt="ID Card" className="mt-2" />}
+                        </Form.Group>
+                        <Form.Group controlId="formidCardBack" className="mt-3">
+                            <Form.Label>ID Card Back Image</Form.Label>
+                            <Form.Control
+                                type="file"
+                                accept="image/*"
+                                name="idCardBack"
+                                onChange={handleChange}
+                                required
+                            />
+                            {formData.idCardBack && <img src={formData.idCardBack} alt="ID Card" className="mt-2" />}
+                        </Form.Group>
                         <Form.Group controlId="formSignature" className="mt-3">
                             <Form.Label>Signature</Form.Label>
                             <br></br>

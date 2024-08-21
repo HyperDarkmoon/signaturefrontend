@@ -28,6 +28,8 @@ const UserRegistration = async ({ data, onSuccess, onError }) => {
             item: formData.selectedItem,
             dob: formData.dob,
             date: new Date().toLocaleDateString(),
+            idCardFront: formData.idCardFront ? formData.idCardFront.split(',')[1] : '',
+            idCardBack: formData.idCardBack ? formData.idCardBack.split(',')[1] : '',
         };
 
         // Send a POST request to the backend server for user registration
