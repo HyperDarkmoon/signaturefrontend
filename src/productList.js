@@ -8,9 +8,9 @@ import UserRegistration from './UserRegistration';
 import generatePDF from './pdfGenerator.js';
 
 // Import the images from the assets folder
-import device1Image from './assets/device1.jpg';
-import device2Image from './assets/device2.jpg';
-import device3Image from './assets/device3.jpg';
+import device1Image from './assets/device1.png';
+import device2Image from './assets/device2.png';
+import device3Image from './assets/device3.png';
 
 const ProductList = () => {
     const items = [
@@ -18,21 +18,21 @@ const ProductList = () => {
             id: 1,
             name: 'SIM Card',
             details: 'Choose your offer',
-            offers: ['Offer 1', 'Offer 2', 'Offer 3'],
+            offers: ['10GB per month', '25GB per month', '50GB per month'],
         },
         {
             id: 2,
             name: 'MBB Device',
             details: 'Choose your device',
             device: [
-                { name: '4G Box Limited', image: device1Image },
-                { name: '4G Box Unlimited', image: device2Image },
-                { name: '4G Key', image: device3Image },
+                { name: 'Flybox 4G', image: device1Image },
+                { name: 'Airbox 4G', image: device2Image },
+                { name: 'Key 4G', image: device3Image },
             ],
             offer: {
-                '4G Box Limited': ['25 GB', '75 GB', '125 GB'],
-                '4G Box Unlimited': ['20Mb/s', '50Mb/s', '100Mb/s'],
-                '4G Key': ['10 GB', '20 GB', '30 GB'],
+                'Flybox 4G': ['25 GB', '75 GB', '125 GB'],
+                'Airbox 4G': ['25 GB', '75 GB', '125 GB'],
+                'Key 4G': ['25 GB', '75 GB', '125 GB'],
             },
         },
     ];
