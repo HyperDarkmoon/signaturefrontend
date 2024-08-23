@@ -1,3 +1,5 @@
+/* App.css */
+
 .App {
   text-align: center;
 }
@@ -35,4 +37,47 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.drawing-canvas-widget {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Ensure it's on top of other content */
+}
+
+.drawing-widget {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.widget-header h4 {
+  margin: 0;
+}
+
+.widget-header .btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.main-content {
+  padding-top: 60px; /* Adjust based on navbar height */
 }

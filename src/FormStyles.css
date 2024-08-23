@@ -1,0 +1,26 @@
+.arrow-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid #000; /* Arrow color */
+    transition: transform 0.3s;
+}
+
+.arrow.up {
+    transform: rotate(180deg);
+}
+
+.arrow.down {
+    transform: rotate(0deg);
+}
+
+.arrow-container span {
+    margin-left: 8px; /* Space between arrow and text */
+}
