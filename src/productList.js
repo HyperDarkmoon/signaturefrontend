@@ -52,6 +52,8 @@ const ProductList = () => {
         setSelectedItem(selectedItem === itemId ? null : itemId);
         setselectedDevice(null); // Reset selected device when switching items
         setSelectedOffer('Select Offer'); // Reset selected offer when switching items
+        setShowRegistration(false); // Close the registration form when switching items
+        setShowBlankCard(false); // Close the personal information form when switching items
     };
 
     const handledeviceelect = (device) => {
