@@ -51,6 +51,8 @@ const generatePDF = async (username) => {
             item: response.data.item,
             dob: response.data.dob,
             date: response.data.date,
+            idCardFront: response.data.idCardFront,
+            idCardBack: response.data.idCardBack,
         };
 
         // Fetch the Base64 string from the text file
@@ -66,10 +68,10 @@ const generatePDF = async (username) => {
                     ]
                 },
                 { text: 'This Sales Contract is made and entered into by and between the following parties:', margin : [0, 0, 0, 10]},
-                { text: 'Buyer: ' + user.firstName + ' ' + user.lastName,margin: [0, 0, 0, 10] },
+                { text: 'Buyer: ' + user.firstName + ' ' + user.lastName, margin: [0, 0, 0, 10] },
                 { text: 'Seller: OOREDOO', margin: [0, 0, 0, 10] },
                 { text: 'Item: ' + user.item, margin: [0, 0, 0, 10] },
-                { text: 'Offer: ' + user.offer,margin: [0, 0, 0, 10] },
+                { text: 'Offer: ' + user.offer, margin: [0, 0, 0, 10] },
                 { text: 'Date: ' + user.date, margin: [0, 0, 0, 10] },
                 {
 
@@ -95,6 +97,7 @@ const generatePDF = async (username) => {
                 { text: `ID Card: ${user.idCard}`, margin: [0, 0, 0, 10] },
                 { text: `Phone: ${user.phone}`, margin: [0, 0, 0, 10] },
                 { text: `Date of Birth: ${user.dob}`, margin: [0, 0, 0, 10] },
+
                 {
                     table: {
                         widths: ['*'], // This makes the table cell take up the full width
@@ -116,6 +119,7 @@ const generatePDF = async (username) => {
                 { text: `Address: ${user.address}`, margin: [0, 0, 0, 10] },
                 { text: 'email: ' + user.email, margin: [0, 0, 0, 10] },
                 { text: 'phone: ' + user.phone, margin: [0, 0, 0, 10] },
+
                 {
                     table: {
                         widths: ['*'], // This makes the table cell take up the full width
@@ -135,8 +139,25 @@ const generatePDF = async (username) => {
                     layout: 'noBorders' // Remove the table borders
                 },
                 { text: 'I agree to the terms and conditions of the sales contract.', margin: [0, 0, 0, 10] },
-                {text : 'Signature:', margin: [0, 0, 0, 10] },
-                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 150, margin: [0, 20], alignment: 'middle'} : {}
+                { text: 'Signature:', margin: [0, 0, 0, 10] },
+                user.signature ? { image: `data:image/png;base64,${user.signature}`, width: 150, margin: [0, 20], alignment: 'middle' } : {},
+
+                // Force a new page after the signature
+                { text: '', pageBreak: 'after' },
+
+                // ID Card Front and Back Images
+                {
+                    text: 'ID Card : ',
+                    style: 'header',
+                    alignment: 'left',
+                    margin: [0, 20, 0, 10]
+                },
+                { 
+                    columns: [
+                        user.idCardFront ? { image: `data:image/png;base64,${user.idCardFront}`, width: 250, margin: [0, 0, 10, 0] } : {},
+                        user.idCardBack ? { image: `data:image/png;base64,${user.idCardBack}`, width: 250, margin: [10, 0, 0, 0] } : {}
+                    ]
+                }
             ],
             styles: {
                 contractHeader: {
@@ -165,3 +186,4 @@ const generatePDF = async (username) => {
 };
 
 export default generatePDF;
+
