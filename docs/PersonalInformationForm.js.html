@@ -54,6 +54,8 @@ const PersonalInformationForm = ({ onSubmit }) => {
         address: '',
         signature: '',
         dob: '',
+        idCardFront: '',
+        idCardBack: '',
     });
     const [error, setError] = useState('');
     const [showDrawingCanvas, setShowDrawingCanvas] = useState(false);
@@ -71,10 +73,28 @@ const PersonalInformationForm = ({ onSubmit }) => {
         * @param {React.ChangeEvent&lt;HTMLInputElement>} e - The change event.
         */
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const { name, files } = e.target;
+        
+        if (files &amp;&amp; files.length > 0) {
+            const updatedFormData = { ...formData };
+            
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    if (name === 'idCardFront') {
+                        updatedFormData.idCardFront = reader.result;
+                    } else if (name === 'idCardBack') {
+                        updatedFormData.idCardBack = reader.result;
+                    }
+                    setFormData(updatedFormData);
+                };
+                reader.readAsDataURL(file);
+            });
+        } else {
+            setFormData({ ...formData, [name]: e.target.value });
+        }
     };
-
+    
     /**
         * Handles form submission. Validates the input and sets an error if validation fails.
         *
@@ -82,13 +102,22 @@ const PersonalInformationForm = ({ onSubmit }) => {
         */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { firstName, lastName, idCard, phoneNumber, address, signature } = formData;
+        const { firstName, lastName, idCard, phoneNumber, address, signature, idCardFront, idCardBack } = formData;
         if (!firstName || !lastName || !idCard || !phoneNumber || !address) {
             setError('All fields are required.');
             return;
         }
         if (!signature) {
             setError('Signature is required.');
+            return;
+        }
+        if (!idCardFront) {
+            setError('ID Card Image is required.');
+            return;
+        }
+
+        if (!idCardBack) { 
+            setError('ID Card Image is required.');
             return;
         }
 
@@ -193,7 +222,28 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 required
                             />
                         &lt;/Form.Group>
-
+                        &lt;Form.Group controlId="formidCardFront" className="mt-3">
+                            &lt;Form.Label>ID Card Front Image&lt;/Form.Label>
+                            &lt;Form.Control
+                                type="file"
+                                accept="image/*"
+                                name="idCardFront"
+                                onChange={handleChange}
+                                required
+                            />
+                            {formData.idCardFront &amp;&amp; &lt;img src={formData.idCardFront} alt="ID Card" className="mt-2" />}
+                        &lt;/Form.Group>
+                        &lt;Form.Group controlId="formidCardBack" className="mt-3">
+                            &lt;Form.Label>ID Card Back Image&lt;/Form.Label>
+                            &lt;Form.Control
+                                type="file"
+                                accept="image/*"
+                                name="idCardBack"
+                                onChange={handleChange}
+                                required
+                            />
+                            {formData.idCardBack &amp;&amp; &lt;img src={formData.idCardBack} alt="ID Card" className="mt-2" />}
+                        &lt;/Form.Group>
                         &lt;Form.Group controlId="formSignature" className="mt-3">
                             &lt;Form.Label>Signature&lt;/Form.Label>
                             &lt;br>&lt;/br>
@@ -232,13 +282,13 @@ export default PersonalInformationForm;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#DrawingCanvas">DrawingCanvas</a></li><li><a href="global.html#PersonalInformationForm">PersonalInformationForm</a></li><li><a href="global.html#ProductList">ProductList</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#fetchBase64FromFile">fetchBase64FromFile</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#getContracts">getContracts</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#DrawingCanvas">DrawingCanvas</a></li><li><a href="global.html#PersonalInformationForm">PersonalInformationForm</a></li><li><a href="global.html#RegistrationForm">RegistrationForm</a></li><li><a href="global.html#UserRegistration">UserRegistration</a></li><li><a href="global.html#fetchBase64FromFile">fetchBase64FromFile</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#getContracts">getContracts</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Aug 20 2024 09:58:09 GMT+0100 (UTC+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon Aug 26 2024 10:10:42 GMT+0100 (UTC+01:00)
 </footer>
 
 <script> prettyPrint(); </script>
