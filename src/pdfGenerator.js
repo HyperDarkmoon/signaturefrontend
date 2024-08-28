@@ -179,7 +179,7 @@ const generatePDF = async (username) => {
         };
 
         // Generate the PDF and trigger the download
-        pdfMake.createPdf(documentDefinition).download(username + ' Contract.pdf');
+        pdfMake.createPdf(documentDefinition).download(user.firstName + " " + user.lastName + ' Contract.pdf');
     } catch (error) {
         console.error('Error generating PDF:', error);
     }
