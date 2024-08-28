@@ -63,7 +63,7 @@ const generatePDF = async (username) => {
             content: [
                 {
                     columns: [
-                        { text: 'SALES CONTRACT', style: 'contractHeader', alignment: 'left' },
+                        { text: 'ACTIVATION CONTRACT', style: 'contractHeader', alignment: 'left' },
                         { image: imageBase64, width: 100, alignment: 'right' }
                     ]
                 },
