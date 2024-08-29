@@ -336,13 +336,15 @@ const ProductList = () => {
                         )}
 
                         {showBlankCard && ( // Conditionally render the submit button
-                            <Button
-                                variant="danger"
-                                onClick={handleSubmit}
-                                className="w-50 mt-3"
-                            >
-                                Submit
-                            </Button>
+                            <div className="centered-button">
+                                <Button
+                                    variant="danger"
+                                    onClick={handleSubmit}
+                                    className="w-50 mt-3"
+                                >
+                                    Submit
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </div>
