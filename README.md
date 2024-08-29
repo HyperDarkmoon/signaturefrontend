@@ -34,3 +34,6 @@ Please consult the [backend repository](https://github.com/hyperdarkmoon/signatu
 - HTML
 - CSS
 - Bootstrap
+
+## Documentation:
+The documentation for this project can be found in the docs folder.
