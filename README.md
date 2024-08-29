@@ -26,7 +26,7 @@ Please consult the [backend repository](https://github.com/hyperdarkmoon/signatu
 4. Fill out the personal information
 5. Upload your ID Card image
 6. Digitally sign
-7. Click "Submit" to generate the contract
+7. Click "Submit" to generate the contract (The backend and database must be running in order to submit and generate the contract)
 
 ## Technologies Used:
 - React.js
