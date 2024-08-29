@@ -113,3 +113,15 @@
     object-fit: cover; /* Ensure the image covers the area without distortion */
     margin-bottom: 5px; /* Space between image and text */
 }
+
+/* Center button class */
+.centered-button {
+    display: flex; /* Use flexbox to center the content */
+    justify-content: center; /* Center horizontally */
+}
+
+/* Adjusting the button width if needed */
+.centered-button .btn {
+    width: 50%; /* Adjust the button width as desired */
+    max-width: 500px; /* Optionally set a maximum width */
+}

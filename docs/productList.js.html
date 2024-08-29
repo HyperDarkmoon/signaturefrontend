@@ -35,27 +35,34 @@ import './productList.css';
 import UserRegistration from './UserRegistration';
 import generatePDF from './pdfGenerator.js';
 
+// Import the images from the assets folder
+import device1Image from './assets/device1.png';
+import device2Image from './assets/device2.png';
+import device3Image from './assets/device3.png';
 /**
- * ProductList component that displays a list of products, allows selection,
- * and handles registration and personal information forms.
- *
+ * The `ProductList` component displays a list of products and offers functionality to register and submit user data.
+ * It allows users to select a product, choose offers or devices, and fill out registration and personal information forms.
+ * It also handles success and error states through modals.
+ * 
  * @component
  * @example
  * return (
  *   &lt;ProductList />
- * );
+ * )
  */
 const ProductList = () => {
     /**
-     * @typedef {Object} Item
-     * @property {number} id - The unique identifier for the item.
-     * @property {string} name - The name of the item.
-     * @property {string} details - Description of the item.
-     * @property {string[]} offers - List of available offers for the item.
-     */
+    * @typedef {Object} Item
+    * @property {number} id - The unique identifier for the item.
+    * @property {string} name - The name of the item.
+    * @property {string} details - Additional details about the item.
+    * @property {Array&lt;string>} [offers] - List of offers for the item.
+    * @property {Array&lt;{ name: string, image: string }>} [device] - List of devices with images for the item.
+    * @property {Object&lt;string, Array&lt;string>>} [offer] - Mapping of device names to their respective offers.
+    */
 
     /**
-     * List of available items.
+     * List of items to display.
      * @type {Item[]}
      */
     const items = [
@@ -63,55 +70,76 @@ const ProductList = () => {
             id: 1,
             name: 'SIM Card',
             details: 'Choose your offer',
-            offers: ['Offer 1', 'Offer 2', 'Offer 3'],
+            offers: ['10GB per month', '25GB per month', '50GB per month'],
         },
         {
             id: 2,
             name: 'MBB Device',
-            details: 'Choose your offer',
-            offers: ['Offer 4', 'Offer 5', 'Offer 6'],
+            details: 'Choose your device',
+            device: [
+                { name: 'Flybox 4G', image: device1Image },
+                { name: 'Airbox 4G', image: device2Image },
+                { name: 'Key 4G', image: device3Image },
+            ],
+            offer: {
+                'Flybox 4G': ['25 GB', '75 GB', '125 GB'],
+                'Airbox 4G': ['25 GB', '75 GB', '125 GB'],
+                'Key 4G': ['25 GB', '75 GB', '125 GB'],
+            },
         },
     ];
 
     const [selectedItem, setSelectedItem] = useState(null);
-    const [selectedOffer, setSelectedOffer] = useState('Select Offer');
+    var [selectedOffer, setSelectedOffer] = useState('Select Offer');
+    const [selectedDevice, setselectedDevice] = useState(null);
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [showRegistration, setShowRegistration] = useState(false);
     const [showBlankCard, setShowBlankCard] = useState(false);
     const [personalInfoData, setPersonalInfoData] = useState(null);
     const [registrationData, setRegistrationData] = useState(null);
     const [showOverlay, setShowOverlay] = useState(false);
-    const [showErrorOverlay, setShowErrorOverlay] = useState(false); // New state for error overlay
-
+    const [showErrorOverlay, setShowErrorOverlay] = useState(false);
     /**
-     * Handles item click to select or deselect an item.
-     *
-     * @param {number} itemId - The id of the item to select or deselect.
-     */
+         * Handles the item click event to select or deselect an item.
+         * Resets device and offer selections when changing items.
+         * 
+         * @param {number} itemId - The ID of the clicked item.
+         */
     const handleItemClick = (itemId) => {
         setSelectedItem(selectedItem === itemId ? null : itemId);
+        setselectedDevice(null); // Reset selected device when switching items
+        setSelectedOffer('Select Offer'); // Reset selected offer when switching items
+        setShowRegistration(false); // Close the registration form when switching items
+        setShowBlankCard(false); // Close the personal information form when switching items
     };
-
     /**
-     * Handles selection of an offer from the dropdown.
-     *
-     * @param {string} offer - The selected offer.
-     */
+        * Handles the device selection event.
+        * 
+        * @param {string} device - The name of the selected device.
+        */
+    const handledeviceelect = (device) => {
+        setselectedDevice(device);
+        setSelectedOffer('Select Offer'); // Reset selected offer when switching device
+    };
+    /**
+         * Handles the offer selection event from the dropdown.
+         * 
+         * @param {string} offer - The selected offer.
+         */
     const handleOfferSelect = (offer) => {
         setSelectedOffer(offer);
         setDropdownOpen(false);
     };
-
     /**
-     * Toggles the state of the dropdown menu.
-     *
-     * @param {boolean} isOpen - The open state of the dropdown.
-     */
+        * Handles the dropdown toggle event.
+        * 
+        * @param {boolean} isOpen - Whether the dropdown is open.
+        */
     const handleDropdownToggle = (isOpen) => {
         setDropdownOpen(isOpen);
     };
-
     /**
+     * Handles the click event for the register button.
      * Shows the registration form if an offer is selected.
      */
     const handleRegisterClick = () => {
@@ -119,37 +147,39 @@ const ProductList = () => {
             setShowRegistration(true);
         }
     };
-
     /**
-     * Shows the blank card for personal information form.
-     */
+         * Handles the click event for the continue button.
+         * Shows the personal information form.
+         */
     const handleContinueClick = () => {
         setShowBlankCard(true);
     };
-
     /**
-     * Handles submission of personal information form data.
-     *
-     * @param {Object} data - The data from the personal information form.
+     * Handles the submission of personal information data.
+     * 
+     * @param {Object} data - The personal information data.
      */
     const handlePersonalInfoSubmit = (data) => {
         setPersonalInfoData(data);
     };
-
     /**
-     * Handles submission of registration form data.
-     *
-     * @param {Object} data - The data from the registration form.
-     */
+         * Handles the submission of registration form data.
+         * 
+         * @param {Object} data - The registration data.
+         */
     const handleRegistrationFormData = (data) => {
         setRegistrationData(data);
     };
-
     /**
-     * Submits the combined registration and personal information data.
-     * Shows success or error overlay based on the submission result.
-     */
+       * Handles the submission of the combined registration and personal information data.
+       * Sends the data to the server and manages success and error states.
+       */
     const handleSubmit = async () => {
+
+        if (selectedItemDetails.name === 'MBB Device') {
+            selectedOffer = selectedItemDetails.name + ' ' + selectedDevice + ' ' + selectedOffer;
+        }
+
         if (registrationData &amp;&amp; personalInfoData) {
             const combinedData = {
                 ...registrationData,
@@ -157,7 +187,7 @@ const ProductList = () => {
                 selectedOffer,
                 selectedItem: selectedItemDetails.name,
             };
-    
+
             try {
                 await UserRegistration({
                     data: { formData: combinedData },
@@ -176,34 +206,38 @@ const ProductList = () => {
             setShowErrorOverlay(true); // Show error overlay if forms are not filled out
         }
     };
-
     /**
-     * Generates a PDF based on the registration data.
-     */
+        * Handles the generation of a PDF for the registration.
+        */
     const handleGeneratePDF = () => {
         const username = registrationData?.username;
         if (username) {
             generatePDF(username);
         }
     };
-
     /**
-     * Resets the state of the component while preserving the username in registrationData.
-     */
+       * Resets the state to its initial values after form submission.
+       * Preserves the username in registrationData if available.
+       */
     const resetState = () => {
         setSelectedOffer('Select Offer');
         setShowRegistration(false);
         setShowBlankCard(false);
         setSelectedItem(null);
+        setselectedDevice(null);
         setPersonalInfoData(null);
-    
+
         // Preserve the username in registrationData
         setRegistrationData(prevState => ({
             ...prevState,
             username: prevState?.username || null
         }));
     };
-
+    /**
+        * Finds the details of the currently selected item.
+        * 
+        * @type {Item | undefined}
+        */
     const selectedItemDetails = items.find(item => item.id === selectedItem);
 
     return (
@@ -232,22 +266,63 @@ const ProductList = () => {
                                 &lt;h4>{selectedItemDetails.name}&lt;/h4>
                                 &lt;p>{selectedItemDetails.details}&lt;/p>
 
-                                &lt;DropdownButton
-                                    id="dropdown-basic-button"
-                                    title={selectedOffer}
-                                    variant="secondary"
-                                    onToggle={handleDropdownToggle}
-                                    className="dropdown-button"
-                                >
-                                    {selectedItemDetails.offers.map((offer, index) => (
-                                        &lt;Dropdown.Item
-                                            key={index}
-                                            onClick={() => handleOfferSelect(offer)}
-                                        >
-                                            {offer}
-                                        &lt;/Dropdown.Item>
-                                    ))}
-                                &lt;/DropdownButton>
+                                {selectedItemDetails.name === 'MBB Device' ? (
+                                    // Render device boxes with images for MBB Device
+                                    &lt;div className="d-flex justify-content-around">
+                                        {selectedItemDetails.device.map((device, index) => (
+                                            &lt;Button
+                                                key={index}
+                                                variant={selectedDevice === device.name ? "primary" : "secondary"}
+                                                onClick={() => handledeviceelect(device.name)}
+                                                className="device-button"
+                                            >
+                                                &lt;img
+                                                    src={device.image}
+                                                    alt={device.name}
+                                                    className="device-image"
+                                                />
+                                                &lt;span>{device.name}&lt;/span>
+                                            &lt;/Button>
+                                        ))}
+
+                                    &lt;/div>
+                                ) : (
+                                    &lt;DropdownButton
+                                        id="dropdown-basic-button"
+                                        title={selectedOffer}
+                                        variant="secondary"
+                                        onToggle={handleDropdownToggle}
+                                        className="dropdown-button"
+                                    >
+                                        {selectedItemDetails.offers.map((offer, index) => (
+                                            &lt;Dropdown.Item
+                                                key={index}
+                                                onClick={() => handleOfferSelect(offer)}
+                                            >
+                                                {offer}
+                                            &lt;/Dropdown.Item>
+                                        ))}
+                                    &lt;/DropdownButton>
+                                )}
+
+                                {selectedDevice &amp;&amp; (
+                                    &lt;DropdownButton
+                                        id="dropdown-device-button"
+                                        title={selectedOffer}
+                                        variant="secondary"
+                                        onToggle={handleDropdownToggle}
+                                        className="dropdown-button mt-3"
+                                    >
+                                        {selectedItemDetails.offer[selectedDevice].map((offer, index) => (
+                                            &lt;Dropdown.Item
+                                                key={index}
+                                                onClick={() => handleOfferSelect(offer)}
+                                            >
+                                                {offer}
+                                            &lt;/Dropdown.Item>
+                                        ))}
+                                    &lt;/DropdownButton>
+                                )}
 
                                 &lt;Button
                                     className="mt-3"
@@ -333,7 +408,7 @@ const ProductList = () => {
                     &lt;Modal.Title>Error&lt;/Modal.Title>
                 &lt;/Modal.Header>
                 &lt;Modal.Body>
-                    &lt;p>Both forms must be filled out before submission.&lt;/p>
+                    &lt;p>Both forms must be filled out before submission!&lt;/p>
                 &lt;/Modal.Body>
                 &lt;Modal.Footer>
                     &lt;Button variant="danger" onClick={() => setShowErrorOverlay(false)}>
@@ -362,7 +437,7 @@ export default ProductList;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Aug 20 2024 09:58:09 GMT+0100 (UTC+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon Aug 26 2024 13:56:10 GMT+0100 (UTC+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -11,8 +11,32 @@ import generatePDF from './pdfGenerator.js';
 import device1Image from './assets/device1.png';
 import device2Image from './assets/device2.png';
 import device3Image from './assets/device3.png';
-
+/**
+ * The `ProductList` component displays a list of products and offers functionality to register and submit user data.
+ * It allows users to select a product, choose offers or devices, and fill out registration and personal information forms.
+ * It also handles success and error states through modals.
+ * 
+ * @component
+ * @example
+ * return (
+ *   <ProductList />
+ * )
+ */
 const ProductList = () => {
+    /**
+    * @typedef {Object} Item
+    * @property {number} id - The unique identifier for the item.
+    * @property {string} name - The name of the item.
+    * @property {string} details - Additional details about the item.
+    * @property {Array<string>} [offers] - List of offers for the item.
+    * @property {Array<{ name: string, image: string }>} [device] - List of devices with images for the item.
+    * @property {Object<string, Array<string>>} [offer] - Mapping of device names to their respective offers.
+    */
+
+    /**
+     * List of items to display.
+     * @type {Item[]}
+     */
     const items = [
         {
             id: 1,
@@ -47,45 +71,81 @@ const ProductList = () => {
     const [registrationData, setRegistrationData] = useState(null);
     const [showOverlay, setShowOverlay] = useState(false);
     const [showErrorOverlay, setShowErrorOverlay] = useState(false);
-
+    /**
+         * Handles the item click event to select or deselect an item.
+         * Resets device and offer selections when changing items.
+         * 
+         * @param {number} itemId - The ID of the clicked item.
+         */
     const handleItemClick = (itemId) => {
         setSelectedItem(selectedItem === itemId ? null : itemId);
         setselectedDevice(null); // Reset selected device when switching items
         setSelectedOffer('Select Offer'); // Reset selected offer when switching items
+        setShowRegistration(false); // Close the registration form when switching items
+        setShowBlankCard(false); // Close the personal information form when switching items
     };
-
+    /**
+        * Handles the device selection event.
+        * 
+        * @param {string} device - The name of the selected device.
+        */
     const handledeviceelect = (device) => {
         setselectedDevice(device);
         setSelectedOffer('Select Offer'); // Reset selected offer when switching device
     };
-
+    /**
+         * Handles the offer selection event from the dropdown.
+         * 
+         * @param {string} offer - The selected offer.
+         */
     const handleOfferSelect = (offer) => {
         setSelectedOffer(offer);
         setDropdownOpen(false);
     };
-
+    /**
+        * Handles the dropdown toggle event.
+        * 
+        * @param {boolean} isOpen - Whether the dropdown is open.
+        */
     const handleDropdownToggle = (isOpen) => {
         setDropdownOpen(isOpen);
     };
-
+    /**
+     * Handles the click event for the register button.
+     * Shows the registration form if an offer is selected.
+     */
     const handleRegisterClick = () => {
         if (selectedOffer !== 'Select Offer') {
             setShowRegistration(true);
         }
     };
-
+    /**
+         * Handles the click event for the continue button.
+         * Shows the personal information form.
+         */
     const handleContinueClick = () => {
         setShowBlankCard(true);
     };
-
+    /**
+     * Handles the submission of personal information data.
+     * 
+     * @param {Object} data - The personal information data.
+     */
     const handlePersonalInfoSubmit = (data) => {
         setPersonalInfoData(data);
     };
-
+    /**
+         * Handles the submission of registration form data.
+         * 
+         * @param {Object} data - The registration data.
+         */
     const handleRegistrationFormData = (data) => {
         setRegistrationData(data);
     };
-
+    /**
+       * Handles the submission of the combined registration and personal information data.
+       * Sends the data to the server and manages success and error states.
+       */
     const handleSubmit = async () => {
 
         if (selectedItemDetails.name === 'MBB Device') {
@@ -118,14 +178,19 @@ const ProductList = () => {
             setShowErrorOverlay(true); // Show error overlay if forms are not filled out
         }
     };
-
+    /**
+        * Handles the generation of a PDF for the registration.
+        */
     const handleGeneratePDF = () => {
         const username = registrationData?.username;
         if (username) {
             generatePDF(username);
         }
     };
-
+    /**
+       * Resets the state to its initial values after form submission.
+       * Preserves the username in registrationData if available.
+       */
     const resetState = () => {
         setSelectedOffer('Select Offer');
         setShowRegistration(false);
@@ -140,7 +205,11 @@ const ProductList = () => {
             username: prevState?.username || null
         }));
     };
-
+    /**
+        * Finds the details of the currently selected item.
+        * 
+        * @type {Item | undefined}
+        */
     const selectedItemDetails = items.find(item => item.id === selectedItem);
 
     return (
@@ -267,13 +336,15 @@ const ProductList = () => {
                         )}
 
                         {showBlankCard && ( // Conditionally render the submit button
-                            <Button
-                                variant="danger"
-                                onClick={handleSubmit}
-                                className="w-50 mt-3"
-                            >
-                                Submit
-                            </Button>
+                            <div className="centered-button">
+                                <Button
+                                    variant="danger"
+                                    onClick={handleSubmit}
+                                    className="w-50 mt-3"
+                                >
+                                    Submit
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </div>

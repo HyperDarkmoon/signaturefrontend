@@ -46,10 +46,10 @@ const PersonalInformationForm = ({ onSubmit }) => {
         */
     const handleChange = (e) => {
         const { name, files } = e.target;
-        
+
         if (files && files.length > 0) {
             const updatedFormData = { ...formData };
-            
+
             Array.from(files).forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onloadend = () => {
@@ -66,7 +66,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
             setFormData({ ...formData, [name]: e.target.value });
         }
     };
-    
+
     /**
         * Handles form submission. Validates the input and sets an error if validation fails.
         *
@@ -88,7 +88,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
             return;
         }
 
-        if (!idCardBack) { 
+        if (!idCardBack) {
             setError('ID Card Image is required.');
             return;
         }
@@ -194,6 +194,8 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 required
                             />
                         </Form.Group>
+                        <br></br>
+                        <h2>Please upload the front and back of your ID card</h2>
                         <Form.Group controlId="formidCardFront" className="mt-3">
                             <Form.Label>ID Card Front Image</Form.Label>
                             <Form.Control
@@ -203,7 +205,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                            {formData.idCardFront && <img src={formData.idCardFront} alt="ID Card" className="mt-2" />}
+                            {formData.idCardFront && <img src={formData.idCardFront} alt="ID Card Front" className="img-preview" />}
                         </Form.Group>
                         <Form.Group controlId="formidCardBack" className="mt-3">
                             <Form.Label>ID Card Back Image</Form.Label>
@@ -214,7 +216,7 @@ const PersonalInformationForm = ({ onSubmit }) => {
                                 onChange={handleChange}
                                 required
                             />
-                            {formData.idCardBack && <img src={formData.idCardBack} alt="ID Card" className="mt-2" />}
+                            {formData.idCardBack && <img src={formData.idCardBack} alt="ID Card Back" className="img-preview" />}
                         </Form.Group>
                         <Form.Group controlId="formSignature" className="mt-3">
                             <Form.Label>Signature</Form.Label>

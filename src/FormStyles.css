@@ -24,3 +24,11 @@
 .arrow-container span {
     margin-left: 8px; /* Space between arrow and text */
 }
+
+.img-preview {
+    max-width: 250px; /* Limits the image width */
+    max-height: 250px; /* Limits the image height */
+    border: 1px solid #ddd; /* Optional: Adds a border around the image */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+    margin-top: 10px; /* Adds some space above the image */
+}
