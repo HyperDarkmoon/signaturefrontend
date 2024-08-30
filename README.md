@@ -1,4 +1,4 @@
-# Project Name: Signature App
+# Signature App
 
 ## Description:
 This project is a web application that allows users to buy products, register and digitally sign their purchase. It generates a digital
